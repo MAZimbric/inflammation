@@ -8,12 +8,18 @@ extract_useful <- function(data, samples) {
 inflammation.reads1 <- extract_useful(inflammation.reads1, inflammation.reads1$Sample)
 inflammation.reads2 <- extract_useful(inflammation.reads2, inflammation.reads2$Sample)
 
-#In order to merge the sets, we need to deal with the < entries
-rm_less_thans <- function(data){
-  
+#In order to merge the sets, we need to deal with the < entries and convert the marker values to numerics
+rm_less_thans <- function(data_column){
+  less_thans <- grep(pattern = "<", as.character(data_column), value = FALSE)
+  data_column[less_thans] <- NA
+  return(data_column)
 }
 
-inflammation_data <- merge(inflammation.reads2, inflammation.reads1)
+f <- colwise(rm_less_thans)
+inflammation.reads1 <- f(inflammation.reads1)
+inflammation.reads2 <- f(inflammation.reads2)
+
+as.numeric(inflammation.reads1[2:32,])
 
 #The following translates the sample code into something useable
 #The initial digit represents the number of days the sample was stored 
