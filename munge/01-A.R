@@ -60,3 +60,4 @@ columns <- ncol(inflammation.data)
 inflammation.data <- inflammation.data[c(columns,columns-1,columns-2,1:(columns-3))]
 
 #correct for dilution of samples
+inflammation.data[4:columns] <- lapply(inflammation.data[4:columns], function(x) x*2)

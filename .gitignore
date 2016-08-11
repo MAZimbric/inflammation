@@ -1,5 +1,7 @@
 #data files
 data/
+.Rhistory
+cache/
 
 # Windows image file caches
 Thumbs.db
