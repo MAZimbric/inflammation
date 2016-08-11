@@ -61,3 +61,6 @@ inflammation.data <- inflammation.data[c(columns,columns-1,columns-2,1:(columns-
 
 #correct for dilution of samples
 inflammation.data[4:columns] <- lapply(inflammation.data[4:columns], function(x) x*2)
+
+#make storage days an integer
+inflammation.data$storage_days <- as.integer(inflammation.data$storage_days)
