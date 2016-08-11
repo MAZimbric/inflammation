@@ -19,9 +19,19 @@ f <- colwise(rm_less_thans)
 inflammation.reads1 <- f(inflammation.reads1)
 inflammation.reads2 <- f(inflammation.reads2)
 
+#function to deal with lack in R, factor to numeric conversion
+factor.to.numeric <- function (f) {
+  f <- as.numeric(as.character(f))
+  return(f)
+}
+  
+
 #this code does not work
-inflammation.reads1 <- ddply(inflammation.reads1, 3:32, as.numeric)
-inflammation.reads2 <- ddply(inflammation.reads2, 3:27, as.numeric)
+inflammation.reads1 <- ddply(inflammation.reads1, 3:32, factor.to.numeric)
+inflammation.reads2 <- ddply(inflammation.reads2, 3:27, factor.to.numeric)
+
+
+
 #The following translates the sample code into something useable
 #The initial digit represents the number of days the sample was stored 
 inflammation.reads1$storage_days <- str_match(inflammation.reads1$Sample, "^[:digit:][:digit:]?")
