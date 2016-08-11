@@ -1,5 +1,5 @@
 This project examines levels of inflammatory markers in sputum samples after different periods of time stored in a refrigerator to determine the stability of readings and whether 
 
 Pre-R data processing:
-A line above the header of average values was deleted and missing data changed from N/A to empty to expedite reading in data. 
+A line above the header of average values was deleted, missing data changed from N/A to NA and values listed as less than the detection threshhold were changed to NA to expedite reading in data. (Otherwise they were read in as factors and made data handling excessively difficult.) 
 
