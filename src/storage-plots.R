@@ -9,5 +9,6 @@ load.project()
 attach(inflammation.data)
 storage_days <- as.factor(storage_days)
 
-plot <- ggplot(inflammation.data, aes(x=storage_days, y=IL.1b))
-plot + geom_point(aes(color=factor(samplesource)))
+ggplot(inflammation.data, aes(x=storage_days, y=IL.1b, color=samplesource, shape=samplesource)) +
+  geom_point() + 
+  geom_smooth(method=lm, se=FALSE, fullrange=FALSE)
