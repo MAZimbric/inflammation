@@ -1,4 +1,6 @@
+#the data are contained in multiple files that need to be merged
 inflammation.data <- merge.data.frame(inflammation.reads1, inflammation.reads2, all = TRUE)
+
 #this function takes the dataset and removes standards and clinical samples
 extract_useful <- function(data, samples) {
   matches <- grep(pattern = "^\\d\\d?", samples, value = FALSE)
@@ -50,3 +52,11 @@ for (i in 1:length(inflammation.data$samplesource)) {
   else if (inflammation.data$samplesource[i] == "I" | inflammation.data$samplesource[i] == "J") inflammation.data$samplesource[i] <- "5"
   else inflammation.data$samplesource[i] <- "unknown"
 }
+#removed processed code
+inflammation.data <- inflammation.data[3:ncol(inflammation.data)]
+
+#rearrange columns
+columns <- ncol(inflammation.data)
+inflammation.data <- inflammation.data[c(columns,columns-1,columns-2,1:(columns-3))]
+
+#correct for dilution of samples
