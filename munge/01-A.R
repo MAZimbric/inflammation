@@ -20,14 +20,13 @@ inflammation.reads1 <- f(inflammation.reads1)
 inflammation.reads2 <- f(inflammation.reads2)
 
 #function to deal with lack in R, factor to numeric conversion
-factor.to.numeric <- function (f) {
-  f <- as.numeric(as.character(f))
-  return(f)
+factor.to.numeric <- function (d) {
+  d <- as.numeric(as.character(d))
+  return(d)
 }
   
-
 #this code does not work
-inflammation.reads1 <- ddply(inflammation.reads1, 3:32, factor.to.numeric)
+inflammation.reads1[3:ncol(inflammation.reads1)] <- ddply(inflammation.reads1[3:ncol(inflammation.reads1)], is.factor == TRUE, factor.to.numeric)
 inflammation.reads2 <- ddply(inflammation.reads2, 3:27, factor.to.numeric)
 
 
