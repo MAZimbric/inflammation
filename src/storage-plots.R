@@ -5,7 +5,7 @@ load.project()
 #This script generates plots for each inflammatory marker
 #with number of days stored as the independent variable and 
 #marker concentration as the dependent variable
-#Initially we'll make Line plots with each of the 5 sample sources.
+#Initially we'll make Line plots with each of the 4 sample sources.
 storage_days <- as.factor(storage_days)
 
 #mean helper function to pass to others, setting na.rm to True
