@@ -64,3 +64,6 @@ inflammation.data[4:columns] <- lapply(inflammation.data[4:columns], function(x)
 
 #make storage days an integer
 inflammation.data$storage_days <- as.integer(inflammation.data$storage_days)
+
+#remove source 4 since the data is incomplete
+inflammation.data <- inflammation.data[which(inflammation.data$samplesource != 4),]

@@ -1,6 +1,6 @@
 #data files
 data/
-.Rhistory
+*.Rhistory
 cache/
 
 # Windows image file caches
