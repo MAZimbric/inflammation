@@ -6,7 +6,6 @@ load.project()
 #with number of days stored as the independent variable and 
 #marker concentration as the dependent variable
 #Initially we'll make Line plots with each of the 4 sample sources.
-storage_days <- as.factor(storage_days)
 
 #mean helper function to pass to others, setting na.rm to True
 na.mean <- function(x) mean(x, na.rm = TRUE)
@@ -16,6 +15,7 @@ agg.out <- function(x) {
   x$storage_days <- x$Group.1
   x$samplesource <- x$Group.2
   x <- x[c(3,5,6)]
+  x$storage_days <- as.integer(x$storage_days)
   return(x)
 }
 
@@ -47,8 +47,8 @@ IL1b$sem <- IL1b$sd/sqrt(IL1b$observations)
 
 ggplot(IL1b, aes(x=storage_days, y=mn, colour=samplesource)) + 
   geom_point() +
-  geom_line(group = mn ) +
-  geom_errorbar(aes(ymin=mn-sem, ymax=mn+sem), width=.1)
+  geom_errorbar(aes(ymin=mn-sem, ymax=mn+sem), width=.1) +
+  scale_x_continuous(name = "Days Stored at 4ºC", breaks = c(0,3,7,14,28))
   
   
 
