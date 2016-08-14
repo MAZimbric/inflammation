@@ -45,10 +45,12 @@ IL1b <- join(IL1b, reps)
 #calculate standard error
 IL1b$sem <- IL1b$sd/sqrt(IL1b$observations)
 
-ggplot(IL1b, aes(x=storage_days, y=mn, colour=samplesource)) + 
+ggplot(IL1b, aes(x=storage_days, y=mn, colour=samplesource), main = "Levels of $Marker after storage") + 
   geom_point() +
   geom_errorbar(aes(ymin=mn-sem, ymax=mn+sem), width=.1) +
-  scale_x_continuous(name = "Days Stored at 4ºC", breaks = c(0,3,7,14,28))
+  scale_x_continuous(name = "Days Stored at 4ºC", breaks = c(0,3,7,14,28)) + 
+  scale_y_continuous(name = "picograms/mL of $marker") +
+  scale_colour_hue("Patient", labels = c("A", "B", "C", "D", "E"))
   
   
 
