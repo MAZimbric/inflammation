@@ -30,15 +30,17 @@ plot.markers <- function(x, na.rm = TRUE){
     #calculate means and standard deviations and number of replicates subsetted by samplesource and storage_days
     mn.marker <- aggregate.data.frame(data.marker, list(storage_days, samplesource), na.mean)
     mn.marker <- agg.out(mn.marker)
-    mn.marker <- rename(mn.marker, replace = c(as.character(markers[i]) = "mn"))
+    names(mn.marker)[names(mn.marker)== markers[i]] <- "mn"
+    #mn.marker <- rename(mn.marker, replace = c(as.character(markers[i]) = "mn"))
 
     sd.marker <- aggregate.data.frame(data.marker, list(storage_days, samplesource), sd)
     sd.marker <- agg.out(sd.marker)
-    sd.marker <- rename(sd.marker, c(markers[i] = "sd"))
-
+    names(sd.marker)[names(sd.marker)== markers[i]] <- "sd"
+    
     reps <- aggregate.data.frame(data.marker, list(storage_days, samplesource), length)
     reps <- agg.out(reps)
-    reps <- rename(reps, c(markers[i] = "observations"))
+    names(reps)[names(reps)== markers[i]] <- "observations"
+    
     
     #merge mean and standard deviation data frames
     marker.summary <- join(mn.marker,sd.marker)
@@ -61,4 +63,4 @@ plot.markers <- function(x, na.rm = TRUE){
     }
 }
 
-
+plot.markers(inflammation.data)
