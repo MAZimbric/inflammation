@@ -23,7 +23,7 @@ agg.out <- function(x) {
 data.IL.1b <- inflammation.data[c('samplesource','replicate','storage_days','IL.1b')]
 
 #drop rows with NA as the value
-data.IL.1b <- data.IL.1b[which(!is.na(IL.1b)),]
+data.IL.1b <- data.IL.1b[which(!is.na(data.IL.1b$IL.1b)),]
 attach(data.IL.1b)
 
 #calculate means and standard deviations and number of replicates subsetted by samplesource and storage_days
@@ -47,9 +47,10 @@ IL1b$sem <- IL1b$sd/sqrt(IL1b$observations)
 
 ggplot(IL1b, aes(x=storage_days, y=mn, colour=samplesource), main = "Levels of $Marker after storage") + 
   geom_point() +
+  geom_line() +
   geom_errorbar(aes(ymin=mn-sem, ymax=mn+sem), width=.1) +
-  scale_x_continuous(name = "Days Stored at 4ÂºC", breaks = c(0,3,7,14,28)) + 
-  scale_y_continuous(name = "picograms/mL of $marker") +
+  scale_x_continuous(name = "Days Stored at 4ºC", breaks = c(0,3,7,14,28)) + 
+  scale_y_continuous(name = "pg/mL of $marker") +
   scale_colour_hue("Patient", labels = c("A", "B", "C", "D", "E"))
   
   
