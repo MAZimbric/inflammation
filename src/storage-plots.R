@@ -19,40 +19,46 @@ agg.out <- function(x) {
   return(x)
 }
 
-#subset data
-data.IL.1b <- inflammation.data[c('samplesource','replicate','storage_days','IL.1b')]
-
-#drop rows with NA as the value
-data.IL.1b <- data.IL.1b[which(!is.na(data.IL.1b$IL.1b)),]
-attach(data.IL.1b)
-
-#calculate means and standard deviations and number of replicates subsetted by samplesource and storage_days
-mn.IL1b <- aggregate.data.frame(data.IL.1b, list(storage_days, samplesource), na.mean)
-mn.IL1b <- agg.out(mn.IL1b)
-mn.IL1b <- rename(mn.IL1b, replace = c("IL.1b" = "mn"))
-
-sd.IL1b <- aggregate.data.frame(data.IL.1b, list(storage_days, samplesource), sd)
-sd.IL1b <- agg.out(sd.IL1b)
-sd.IL1b <- rename(sd.IL1b, c("IL.1b" = "sd"))
-
-reps <- aggregate.data.frame(data.IL.1b, list(storage_days, samplesource), length)
-reps <- agg.out(reps)
-reps <- rename(reps, c("IL.1b" = "observations"))
-#merge mean and standard deviation data frames
-IL1b <- join(mn.IL1b,sd.IL1b)
-IL1b <- join(IL1b, reps)
-
-#calculate standard error
-IL1b$sem <- IL1b$sd/sqrt(IL1b$observations)
-
-ggplot(IL1b, aes(x=storage_days, y=mn, colour=samplesource), main = "Levels of $Marker after storage") + 
-  geom_point() +
-  geom_line() +
-  geom_errorbar(aes(ymin=mn-sem, ymax=mn+sem), width=.1) +
-  scale_x_continuous(name = "Days Stored at 4ºC", breaks = c(0,3,7,14,28)) + 
-  scale_y_continuous(name = "pg/mL of $marker") +
-  scale_colour_hue("Patient", labels = c("A", "B", "C", "D", "E"))
+#function wrapper for plots
+plot.markers <- function(x, na.rm = TRUE){
+  markers <- names(inflammation.data[4:ncol(inflammation.data)])
+  for (i in seq_along(markers)){
   
-  
+    #subset data
+    data.marker <- inflammation.data[c('samplesource','replicate','storage_days',markers[i])]
+
+    #calculate means and standard deviations and number of replicates subsetted by samplesource and storage_days
+    mn.marker <- aggregate.data.frame(data.marker, list(storage_days, samplesource), na.mean)
+    mn.marker <- agg.out(mn.marker)
+    mn.marker <- rename(mn.marker, replace = c(as.character(markers[i]) = "mn"))
+
+    sd.marker <- aggregate.data.frame(data.marker, list(storage_days, samplesource), sd)
+    sd.marker <- agg.out(sd.marker)
+    sd.marker <- rename(sd.marker, c(markers[i] = "sd"))
+
+    reps <- aggregate.data.frame(data.marker, list(storage_days, samplesource), length)
+    reps <- agg.out(reps)
+    reps <- rename(reps, c(markers[i] = "observations"))
+    
+    #merge mean and standard deviation data frames
+    marker.summary <- join(mn.marker,sd.marker)
+    marker.summary <- join(marker.summary, reps)
+
+    #calculate standard error
+    marker.summary$sem <- marker.summary$sd/sqrt(marker.summary$observations)
+
+    marker.plot <- ggplot(marker.summary, aes(x=storage_days, y=mn, colour=samplesource), main = paste("Levels of", marker, "after storage")) + 
+      geom_point() +
+      geom_line() +
+      geom_errorbar(aes(ymin=mn-sem, ymax=mn+sem), width=.1) +
+      scale_x_continuous(name = "Days Stored at 4ºC", breaks = c(0,3,7,14,28)) + 
+      scale_y_log10(name = paste("pg/mL of", marker)) +
+      scale_colour_hue("Patient", labels = c("A", "B", "C", "D", "E"))
+    
+    ggsave(plots,filename=paste("myplot", markers[i],".png",sep=""))
+   
+    
+    }
+}
 
 
