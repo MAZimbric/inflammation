@@ -1,14 +1,11 @@
+source(file = "src/helpers.R")
+
 #the data are contained in multiple files that need to be merged
 inflammation.data <- merge.data.frame(inflammation.reads1, inflammation.reads2, all = TRUE)
 #inflammation.data <- merge.data.frame(inflammation.reads3, inflammation.data, all = TRUE)
 
 #lines 5 - 60 clean the and prepare the storage data
 #this function takes the dataset and extracts only the storage sests
-extract.match.rows <- function(data, column, ptrn) {
-  matches <- grep(pattern = ptrn, column, value = FALSE)
-  data <- data[matches,] 
-  return(data)
-}
 inflammation.storage.data <- extract.match.rows(inflammation.data, inflammation.data$Sample, "^\\d\\d?")
 
 #The following translates the storage sample code into something useable
@@ -60,12 +57,12 @@ inflammation.storage.data <- inflammation.storage.data[,colSums(is.na(inflammati
 #Lines 60 - 69 clean and prepare the standards 
 #We would like to extract the maximum of the seventh standard values for each marker to use as a threshold
 inflammation.standards <- extract.match.rows(inflammation.data, inflammation.data$Sample, "^S7")
-#helper function to pass to apply
-na.max <- function(x) max(x, na.rm = TRUE)
 thresholds <- apply(inflammation.standards[3:ncol(inflammation.standards)], 2, na.max)
 
 
 
 
+#find the global maximum of all marker levels to use as a common y-axis limit
+unknowns <- extract.match.rows(inflammation.data, inflammation.data$Plate, "^Unknown")
 
   
