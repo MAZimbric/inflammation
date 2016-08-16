@@ -26,18 +26,20 @@ plot.markers <- function(x){
   
     #subset data
     data.marker <- inflammation.data[c('samplesource','replicate','storage_days',markers[i])]
-
+    #remove NA so that aggregate doesn't throw an error
+    data.marker <- na.omit(data.marker)
+    
     #calculate means and standard deviations and number of replicates subsetted by samplesource and storage_days
-    mn.marker <- aggregate.data.frame(data.marker, list(storage_days, samplesource), na.mean)
+    mn.marker <- aggregate.data.frame(data.marker, list(data.marker$storage_days, data.marker$samplesource), na.mean)
     mn.marker <- agg.out(mn.marker)
     names(mn.marker)[names(mn.marker)== markers[i]] <- "mn"
     #mn.marker <- rename(mn.marker, replace = c(as.character(markers[i]) = "mn"))
 
-    sd.marker <- aggregate.data.frame(data.marker, list(storage_days, samplesource), sd)
+    sd.marker <- aggregate.data.frame(data.marker, list(data.marker$storage_days, data.marker$samplesource), sd)
     sd.marker <- agg.out(sd.marker)
     names(sd.marker)[names(sd.marker)== markers[i]] <- "sd"
     
-    reps <- aggregate.data.frame(data.marker, list(storage_days, samplesource), length)
+    reps <- aggregate.data.frame(data.marker, list(data.marker$storage_days, data.marker$samplesource), length)
     reps <- agg.out(reps)
     names(reps)[names(reps)== markers[i]] <- "observations"
     
@@ -54,10 +56,10 @@ plot.markers <- function(x){
       geom_line() +
       geom_errorbar(aes(ymin=mn-sem, ymax=mn+sem), width=.1) +
       scale_x_continuous(name = "Days Stored at 4ºC", breaks = c(0,3,7,14,28)) + 
-      scale_y_log10(name = paste("pg/mL of", marker)) +
+      scale_y_log10(name = paste("pg/mL of", markers[i])) +
       scale_colour_hue("Patient", labels = c("A", "B", "C", "D", "E"))
     
-    ggsave(plots,filename=paste("myplot", markers[i],".png",sep=""))
+    ggsave(marker.plot,filename=paste("figures/preliminary-plot-", markers[i],".png",sep=""))
     }
 }
 
