@@ -20,7 +20,7 @@ agg.out <- function(x) {
 }
 
 #function wrapper for plots
-plot.markers <- function(x, na.rm = TRUE){
+plot.markers <- function(x){
   markers <- names(inflammation.data[4:ncol(inflammation.data)])
   for (i in seq_along(markers)){
   
@@ -58,9 +58,9 @@ plot.markers <- function(x, na.rm = TRUE){
       scale_colour_hue("Patient", labels = c("A", "B", "C", "D", "E"))
     
     ggsave(plots,filename=paste("myplot", markers[i],".png",sep=""))
-   
-    
     }
 }
 
+
 plot.markers(inflammation.data)
+
