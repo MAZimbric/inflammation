@@ -4,12 +4,12 @@ inflammation.data <- merge.data.frame(inflammation.reads3, inflammation.data, al
 
 #lines 5 - 60 clean the and prepare the storage data
 #this function takes the dataset and extracts only the storage sests
-extract_storage <- function(data, samples, ) {
-  matches <- grep(pattern = "^\\d\\d?", samples, value = FALSE)
+extract.match.rows <- function(data, column, ptrn) {
+  matches <- grep(pattern = ptrn, samples, value = FALSE)
   data <- data[matches,] 
   return(data)
 }
-inflammation.storage.data <- extract_storage(inflammation.data, inflammation.data$Sample)
+inflammation.storage.data <- extract_storage(inflammation.data, inflammation.data$Sample, "^\\d\\d?")
 
 #The following translates the storage sample code into something useable
 #The initial digit represents the number of days the sample was stored 
@@ -60,4 +60,5 @@ inflammation.storage.data <- inflammation.storage.data[,colSums(is.na(inflammati
 
 #Lines 61 - X clean and prepare the standards 
 #We would like to extract the maximum of the seventh standard values for each marker to use as a threshold
-extract_standard <- function(x, samples)
+inflammation.standards <- extract_storage(inflammation.data, inflammation.data$Sample, "^\\d\\d?")
+  
