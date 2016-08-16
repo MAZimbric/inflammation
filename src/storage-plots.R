@@ -1,4 +1,4 @@
-setwd("D://mzimbric/Desktop/Projects/inflammation")
+#setwd("D://mzimbric/Desktop/Projects/inflammation")
 library(ProjectTemplate)
 load.project()
 
@@ -55,7 +55,7 @@ plot.markers <- function(x){
       geom_point() +
       geom_line() +
       geom_errorbar(aes(ymin=mn-sem, ymax=mn+sem), width=.1) +
-      scale_x_continuous(name = "Days Stored at 4ºC", breaks = c(0,3,7,14,28)) + 
+      scale_x_continuous(name = "Days Stored at 4ÂºC", breaks = c(0,3,7,14,28)) + 
       scale_y_log10(name = paste("pg/mL of", markers[i])) +
       scale_colour_hue("Patient", labels = c("A", "B", "C", "D", "E"))
     
