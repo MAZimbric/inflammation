@@ -1,17 +1,17 @@
 #the data are contained in multiple files that need to be merged
 inflammation.data <- merge.data.frame(inflammation.reads1, inflammation.reads2, all = TRUE)
+inflammation.data <- merge.data.frame(inflammation.reads3, inflammation.data, all = TRUE)
 
-#this function takes the dataset and removes standards and clinical samples
-extract_useful <- function(data, samples) {
+#lines 5 - 60 clean the and prepare the storage data
+#this function takes the dataset and extracts only the storage sests
+extract_storage <- function(data, samples, ) {
   matches <- grep(pattern = "^\\d\\d?", samples, value = FALSE)
   data <- data[matches,] 
   return(data)
 }
+inflammation.storage.data <- extract_storage(inflammation.data, inflammation.data$Sample)
 
-#and now we call them on the two sets
-inflammation.storage.data <- extract_useful(inflammation.data, inflammation.data$Sample)
-
-#The following translates the sample code into something useable
+#The following translates the storage sample code into something useable
 #The initial digit represents the number of days the sample was stored 
 inflammation.storage.data$storage_days <- str_match(inflammation.storage.data$Sample, "^[:digit:][:digit:]?")
 
@@ -48,3 +48,16 @@ inflammation.storage.data <- inflammation.storage.data[which(inflammation.storag
 
 #remove columns that are all NA
 inflammation.storage.data <- inflammation.storage.data[,colSums(is.na(inflammation.storage.data))<nrow(inflammation.storage.data)]
+
+
+
+#This space intentionally left blank
+
+
+
+
+
+
+#Lines 61 - X clean and prepare the standards 
+#We would like to extract the maximum of the seventh standard values for each marker to use as a threshold
+extract_standard <- function(x, samples)
