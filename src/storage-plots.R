@@ -20,7 +20,7 @@ agg.out <- function(x) {
 }
 
 #function wrapper for plots
-plot.markers <- function(x){
+plot.markers <- function(x, thresh){
   markers <- names(inflammation.storage.data[4:ncol(inflammation.storage.data)])
   for (i in seq_along(markers)){
   
@@ -51,18 +51,24 @@ plot.markers <- function(x){
     #calculate standard error
     marker.summary$sem <- marker.summary$sd/sqrt(marker.summary$observations)
 
+    #define the threshold
+    threshold <- thresholds[[markers[i]]]
+    
     marker.plot <- ggplot(marker.summary, aes(x=storage_days, y=mn, colour=samplesource), main = paste("Levels of", marker, "after storage")) + 
       geom_point() +
       geom_line() +
       geom_errorbar(aes(ymin=mn-sem, ymax=mn+sem), width=.1) +
+      geom_hline(yintercept = threshold, color = "red", linetype = "dashed") +
       scale_x_continuous(name = "Days Stored at 4ºC", breaks = c(0,3,7,14,28)) + 
       scale_y_log10(name = paste("pg/mL of", markers[i])) +
       scale_colour_hue("Patient", labels = c("A", "B", "C", "D", "E"))
+      
     
     ggsave(marker.plot,filename=paste("figures/preliminary-plot-", markers[i],".png",sep=""))
     }
 }
 
 
-plot.markers(inflammation.storage.data)
+plot.markers(inflammation.storage.data, thresholds)
+
 
