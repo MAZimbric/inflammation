@@ -65,4 +65,8 @@ thresholds <- apply(inflammation.standards[3:ncol(inflammation.standards)], 2, n
 #find the global maximum of all marker levels to use as a common y-axis limit
 unknowns <- extract.match.rows(inflammation.data, inflammation.data$Plate, "^Unknown")
 
+unknowns.list <- apply(unknowns[3:ncol(unknowns)], 2, na.max)
+y.max <- max(unknowns.list)
+#add a buffer value to y.max
+y.max <- y.max + .05*y.max
   

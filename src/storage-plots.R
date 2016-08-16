@@ -9,7 +9,7 @@ source(file = "src/helpers.R")
 #Initially we'll make Line plots with each of the 4 sample sources.
 
 #function wrapper for plots
-plot.markers <- function(x, thresh){
+plot.markers <- function(x, thresh, y.value){
   markers <- names(inflammation.storage.data[4:ncol(inflammation.storage.data)])
   for (i in seq_along(markers)){
   
@@ -49,7 +49,7 @@ plot.markers <- function(x, thresh){
       geom_errorbar(aes(ymin=mn-sem, ymax=mn+sem), width=.1) +
       geom_hline(yintercept = threshold, color = "red", linetype = "dashed") +
       scale_x_continuous(name = "Days Stored at 4ºC", breaks = c(0,3,7,14,28)) + 
-      scale_y_log10(name = paste("pg/mL of", markers[i])) +
+      scale_y_log10(name = paste("pg/mL of", markers[i]), limits = c(1, y.value)) +
       scale_colour_hue("Patient", labels = c("A", "B", "C", "D", "E"))
       
     
@@ -58,6 +58,6 @@ plot.markers <- function(x, thresh){
 }
 
 
-plot.markers(inflammation.storage.data, thresholds)
+plot.markers(inflammation.storage.data, thresholds, y.max)
 
 
