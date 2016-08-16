@@ -44,3 +44,6 @@ inflammation.data$storage_days <- as.integer(inflammation.data$storage_days)
 
 #remove source 4 since the data is incomplete
 inflammation.data <- inflammation.data[which(inflammation.data$samplesource != 4),]
+
+#remove columns that are all NA
+inflammation.data <- inflammation.data[,colSums(is.na(inflammation.data))<nrow(inflammation.data)]
