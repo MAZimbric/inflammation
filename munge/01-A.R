@@ -7,43 +7,44 @@ extract_useful <- function(data, samples) {
   data <- data[matches,] 
   return(data)
 }
+
 #and now we call them on the two sets
-inflammation.data <- extract_useful(inflammation.data, inflammation.data$Sample)
+inflammation.storage.data <- extract_useful(inflammation.data, inflammation.data$Sample)
 
 #The following translates the sample code into something useable
 #The initial digit represents the number of days the sample was stored 
-inflammation.data$storage_days <- str_match(inflammation.data$Sample, "^[:digit:][:digit:]?")
+inflammation.storage.data$storage_days <- str_match(inflammation.storage.data$Sample, "^[:digit:][:digit:]?")
 
-inflammation.data$replicate[grep(pattern = "[ACEGIKM]", inflammation.data$Sample, value = FALSE)] <- 1
-inflammation.data$replicate[grep(pattern = "[BDFHJL]", inflammation.data$Sample, value = FALSE)] <- 2
-inflammation.data$replicate <- as.factor(inflammation.data$replicate)
+inflammation.storage.data$replicate[grep(pattern = "[ACEGIKM]", inflammation.storage.data$Sample, value = FALSE)] <- 1
+inflammation.storage.data$replicate[grep(pattern = "[BDFHJL]", inflammation.storage.data$Sample, value = FALSE)] <- 2
+inflammation.storage.data$replicate <- as.factor(inflammation.storage.data$replicate)
 
 #The letter represents the patient. A and B are the same patient. C and D are the same patient, etc. 
 #When you figure out an elegant way to do this, please do it.
-inflammation.data$samplesource <- str_match(inflammation.data$Sample, "[:alpha:]$")
-for (i in 1:length(inflammation.data$samplesource)) {
-  if (inflammation.data$samplesource[i] == "A" | inflammation.data$samplesource[i] == "B") inflammation.data$samplesource[i] <- "1"
-  else if (inflammation.data$samplesource[i] == "C" | inflammation.data$samplesource[i] == "D") inflammation.data$samplesource[i] <- "2"
-  else if (inflammation.data$samplesource[i] == "E" | inflammation.data$samplesource[i] == "F") inflammation.data$samplesource[i] <- "3"
-  else if (inflammation.data$samplesource[i] == "G" | inflammation.data$samplesource[i] == "H") inflammation.data$samplesource[i] <- "4"
-  else if (inflammation.data$samplesource[i] == "I" | inflammation.data$samplesource[i] == "J") inflammation.data$samplesource[i] <- "5"
-  else inflammation.data$samplesource[i] <- "unknown"
+inflammation.storage.data$samplesource <- str_match(inflammation.storage.data$Sample, "[:alpha:]$")
+for (i in 1:length(inflammation.storage.data$samplesource)) {
+  if (inflammation.storage.data$samplesource[i] == "A" | inflammation.storage.data$samplesource[i] == "B") inflammation.storage.data$samplesource[i] <- "1"
+  else if (inflammation.storage.data$samplesource[i] == "C" | inflammation.storage.data$samplesource[i] == "D") inflammation.storage.data$samplesource[i] <- "2"
+  else if (inflammation.storage.data$samplesource[i] == "E" | inflammation.storage.data$samplesource[i] == "F") inflammation.storage.data$samplesource[i] <- "3"
+  else if (inflammation.storage.data$samplesource[i] == "G" | inflammation.storage.data$samplesource[i] == "H") inflammation.storage.data$samplesource[i] <- "4"
+  else if (inflammation.storage.data$samplesource[i] == "I" | inflammation.storage.data$samplesource[i] == "J") inflammation.storage.data$samplesource[i] <- "5"
+  else inflammation.storage.data$samplesource[i] <- "unknown"
 }
 #removed processed code
-inflammation.data <- inflammation.data[3:ncol(inflammation.data)]
+inflammation.storage.data <- inflammation.storage.data[3:ncol(inflammation.storage.data)]
 
 #rearrange columns
-columns <- ncol(inflammation.data)
-inflammation.data <- inflammation.data[c(columns,columns-1,columns-2,1:(columns-3))]
+columns <- ncol(inflammation.storage.data)
+inflammation.storage.data <- inflammation.storage.data[c(columns,columns-1,columns-2,1:(columns-3))]
 
 #correct for dilution of samples
-inflammation.data[4:columns] <- lapply(inflammation.data[4:columns], function(x) x*2)
+inflammation.storage.data[4:columns] <- lapply(inflammation.storage.data[4:columns], function(x) x*2)
 
 #make storage days an integer
-inflammation.data$storage_days <- as.integer(inflammation.data$storage_days)
+inflammation.storage.data$storage_days <- as.integer(inflammation.storage.data$storage_days)
 
 #remove source 4 since the data is incomplete
-inflammation.data <- inflammation.data[which(inflammation.data$samplesource != 4),]
+inflammation.storage.data <- inflammation.storage.data[which(inflammation.storage.data$samplesource != 4),]
 
 #remove columns that are all NA
-inflammation.data <- inflammation.data[,colSums(is.na(inflammation.data))<nrow(inflammation.data)]
+inflammation.storage.data <- inflammation.storage.data[,colSums(is.na(inflammation.storage.data))<nrow(inflammation.storage.data)]

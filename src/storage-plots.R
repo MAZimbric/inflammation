@@ -21,11 +21,11 @@ agg.out <- function(x) {
 
 #function wrapper for plots
 plot.markers <- function(x){
-  markers <- names(inflammation.data[4:ncol(inflammation.data)])
+  markers <- names(inflammation.storage.data[4:ncol(inflammation.storage.data)])
   for (i in seq_along(markers)){
   
     #subset data
-    data.marker <- inflammation.data[c('samplesource','replicate','storage_days',markers[i])]
+    data.marker <- inflammation.storage.data[c('samplesource','replicate','storage_days',markers[i])]
     #remove NA so that aggregate doesn't throw an error
     data.marker <- na.omit(data.marker)
     
@@ -64,5 +64,5 @@ plot.markers <- function(x){
 }
 
 
-plot.markers(inflammation.data)
+plot.markers(inflammation.storage.data)
 
