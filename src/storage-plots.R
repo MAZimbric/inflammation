@@ -49,7 +49,7 @@ plot.markers <- function(x, thresh, y.value){
       geom_errorbar(aes(ymin=mn-sem, ymax=mn+sem), width=.1) +
       geom_hline(yintercept = threshold, color = "red", linetype = "dashed") +
       scale_x_continuous(name = "Days Stored at 4ºC", breaks = c(0,3,7,14,28)) + 
-      scale_y_log10(name = paste("pg/mL of", markers[i]), limits = c(1, y.value)) +
+      scale_y_log10(name = paste("pg/mL of", markers[i]), limits = c(1, y.value), breaks = c(1, 5, 10, 50, 100, 500, 1000, 5000, 10000, 50000)) +
       scale_colour_hue("Patient", labels = c("A", "B", "C", "D", "E"))
       
     
