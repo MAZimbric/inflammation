@@ -21,3 +21,6 @@ agg.out <- function(x) {
   x$storage_days <- as.integer(x$storage_days)
   return(x)
 }
+
+#removes columns that are all NA
+drop.na.column <- function (df) df[,colSums(is.na(df))<nrow(df)]

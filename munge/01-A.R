@@ -46,7 +46,7 @@ inflammation.storage.data$storage_days <- as.integer(inflammation.storage.data$s
 inflammation.storage.data <- inflammation.storage.data[which(inflammation.storage.data$samplesource != 4),]
 
 #remove columns that are all NA
-inflammation.storage.data <- inflammation.storage.data[,colSums(is.na(inflammation.storage.data))<nrow(inflammation.storage.data)]
+inflammation.storage.data <- drop.na.column(inflammation.storage.data)
 
 
 
@@ -76,7 +76,7 @@ y.max <- y.max + .05*y.max
 
 #extract clinical data
 clinical.inflammation.data <- extract.match.rows(inflammation.data, inflammation.data$Sample, "^SP\\d")
-clinical.inflammation.data <- clinical.inflammation.data[,colSums(is.na(clinical.inflammation.data))<nrow(clinical.inflammation.data)]
+clinical.inflammation.data <- drop.na.column(clinical.inflammation.data)
 
 combined.clinical <- merge(x=clinical.inflammation.data, y=clinical.data, by.x="Sample", by.y="sample")
 #drop excess columns 

@@ -13,7 +13,7 @@ plot.clinical <- function(clinical) {
   for (i in seq_along(markers)) {
     for (j in patients){
       #subset by patient id
-      plot.data <- subset(clinical, clinical$retro_id == j)
+      plot.data <- clinical[clinical$retro_ID == j,]
       
       patient.plot <- ggplot(plot.data, aes(x=SP_age, y = markers[i])) +
         geom_point() +
