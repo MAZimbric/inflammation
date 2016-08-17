@@ -82,3 +82,11 @@ combined.clinical <- merge(x=clinical.inflammation.data, y=clinical.data, by.x="
 #drop excess columns 
 combined.clinical <- combined.clinical[c(-2,-41:-45)]
 combined.clinical <- rename(combined.clinical, c("disease_status..0.no..1.yes." = "disease_status", "sample_timing..0.pre..1.post." = "sample_timing"))
+combined.clinical <- combined.clinical[c(1,32:39,2:31)]
+combined.clinical$retro_ID <- as.factor(combined.clinical$retro_ID)
+
+combined.clinical$disease_status <- as.factor(combined.clinical$disease_status)
+levels(combined.clinical$disease_status) <- c("no", "yes")
+
+combined.clinical$sample_timing <- as.factor(combined.clinical$sample_timing)
+levels(combined.clinical$sample_timing) <- c("before", "after")
