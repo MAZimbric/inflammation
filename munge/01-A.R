@@ -14,8 +14,8 @@ inflammation.storage.data <- extract.match.rows(inflammation.data, inflammation.
 #The initial digit represents the number of days the sample was stored 
 inflammation.storage.data$storage_days <- str_match(inflammation.storage.data$Sample, "^[:digit:][:digit:]?")
 
-inflammation.storage.data$replicate[grep(pattern = "[ACEGIKM]", inflammation.storage.data$Sample, value = FALSE)] <- 1
 inflammation.storage.data$replicate[grep(pattern = "[BDFHJL]", inflammation.storage.data$Sample, value = FALSE)] <- 2
+inflammation.storage.data$replicate[grep(pattern = "[ACEGIKM]", inflammation.storage.data$Sample, value = FALSE)] <- 1
 inflammation.storage.data$replicate <- as.factor(inflammation.storage.data$replicate)
 
 #The letter represents the patient. A and B are the same patient. C and D are the same patient, etc. 
@@ -83,7 +83,6 @@ combined.clinical <- merge(x=clinical.inflammation.data, y=clinical.data, by.x="
 combined.clinical <- combined.clinical[c(-2,-41:-45)]
 combined.clinical <- rename(combined.clinical, c("disease_status..0.no..1.yes." = "disease_status", "sample_timing..0.pre..1.post." = "sample_timing"))
 combined.clinical <- combined.clinical[c(1,32:39,2:31)]
-combined.clinical$retro_ID <- as.factor(combined.clinical$retro_ID)
 
 combined.clinical$disease_status <- as.factor(combined.clinical$disease_status)
 levels(combined.clinical$disease_status) <- c("no", "yes")
