@@ -15,6 +15,7 @@ plot.clinical <- function(clinical){
       #subset by patient id
       plot.data <- clinical[clinical$retro_ID == j,]
       
+      #bug in this loop, I think, when the column is all NA
       if (all(is.na(clinical[markers[i]]))) next
       
       else {
