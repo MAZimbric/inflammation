@@ -1,4 +1,4 @@
-#setwd("D://mzimbric/Desktop/Projects/inflammation")
+setwd("D://mzimbric/Desktop/Projects/inflammation")
 library(ProjectTemplate)
 load.project()
 source(file = "src/helpers.R")

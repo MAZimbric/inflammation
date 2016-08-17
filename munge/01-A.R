@@ -2,7 +2,9 @@ source(file = "src/helpers.R")
 
 #the data are contained in multiple files that need to be merged
 inflammation.data <- merge.data.frame(inflammation.reads1, inflammation.reads2, all = TRUE)
-#inflammation.data <- merge.data.frame(inflammation.reads3, inflammation.data, all = TRUE)
+#the 3rd sheet has extra empty rows for some reason, remove them
+inflammation.reads3 <- inflammation.reads3[1:26,]
+inflammation.data <- merge.data.frame(inflammation.reads3, inflammation.data, all = TRUE)
 
 #lines 5 - 60 clean the and prepare the storage data
 #this function takes the dataset and extracts only the storage sests
@@ -75,3 +77,5 @@ y.max <- y.max + .05*y.max
 #extract clinical data
 clinical.inflammation.data <- extract.match.rows(inflammation.data, inflammation.data$Sample, "^SP\\d")
 clinical.inflammation.data <- clinical.inflammation.data[,colSums(is.na(clinical.inflammation.data))<nrow(clinical.inflammation.data)]
+
+combined.clinical <- merge(x=clinical.inflammation.data, y=clinical.data, by.x="Sample", by.y="sample")
