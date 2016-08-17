@@ -79,3 +79,6 @@ clinical.inflammation.data <- extract.match.rows(inflammation.data, inflammation
 clinical.inflammation.data <- clinical.inflammation.data[,colSums(is.na(clinical.inflammation.data))<nrow(clinical.inflammation.data)]
 
 combined.clinical <- merge(x=clinical.inflammation.data, y=clinical.data, by.x="Sample", by.y="sample")
+#drop excess columns 
+combined.clinical <- combined.clinical[c(-2,-41:-45)]
+combined.clinical <- rename(combined.clinical, c("disease_status..0.no..1.yes." = "disease_status", "sample_timing..0.pre..1.post." = "sample_timing"))
