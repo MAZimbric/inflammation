@@ -14,11 +14,15 @@ plot.clinical <- function(clinical) {
     for (j in patients){
       #subset by patient id
       plot.data <- clinical[clinical$retro_ID == j,]
+      plot.data <- drop.na.column(plot.data)
+      divider <- plot.data$X1st_NTM_age[1] 
       
-      patient.plot <- ggplot(plot.data, aes(x=SP_age, y = markers[i])) +
+      patient.plot <- ggplot(plot.data, aes_string(x= "SP_age", y = markers[i])) +
         geom_point() +
         geom_line() +
-        geom_vline(X1st_NTM_age[1])
+        geom_vline(xintercept = divider)
+      
+      ggsave(patient.plot, filename=paste("figures/clinical/preliminary-plot-", markers[i], "patient-", j, ".png",sep=""))
     }
   }
 }
