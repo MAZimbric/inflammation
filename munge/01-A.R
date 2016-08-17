@@ -1,17 +1,14 @@
+source(file = "src/helpers.R")
+
 #the data are contained in multiple files that need to be merged
 inflammation.data <- merge.data.frame(inflammation.reads1, inflammation.reads2, all = TRUE)
+#inflammation.data <- merge.data.frame(inflammation.reads3, inflammation.data, all = TRUE)
 
-#this function takes the dataset and removes standards and clinical samples
-extract_useful <- function(data, samples) {
-  matches <- grep(pattern = "^\\d\\d?", samples, value = FALSE)
-  data <- data[matches,] 
-  return(data)
-}
+#lines 5 - 60 clean the and prepare the storage data
+#this function takes the dataset and extracts only the storage sests
+inflammation.storage.data <- extract.match.rows(inflammation.data, inflammation.data$Sample, "^\\d\\d?")
 
-#and now we call them on the two sets
-inflammation.storage.data <- extract_useful(inflammation.data, inflammation.data$Sample)
-
-#The following translates the sample code into something useable
+#The following translates the storage sample code into something useable
 #The initial digit represents the number of days the sample was stored 
 inflammation.storage.data$storage_days <- str_match(inflammation.storage.data$Sample, "^[:digit:][:digit:]?")
 
@@ -48,3 +45,33 @@ inflammation.storage.data <- inflammation.storage.data[which(inflammation.storag
 
 #remove columns that are all NA
 inflammation.storage.data <- inflammation.storage.data[,colSums(is.na(inflammation.storage.data))<nrow(inflammation.storage.data)]
+
+
+
+#This space intentionally left blank
+
+
+
+
+
+#Lines 60 - 69 clean and prepare the standards 
+#We would like to extract the maximum of the seventh standard values for each marker to use as a threshold
+inflammation.standards <- extract.match.rows(inflammation.data, inflammation.data$Sample, "^S7")
+thresholds <- apply(inflammation.standards[3:ncol(inflammation.standards)], 2, na.max)
+
+
+
+
+#find the global maximum of all marker levels to use as a common y-axis limit
+unknowns <- extract.match.rows(inflammation.data, inflammation.data$Plate, "^Unknown")
+
+unknowns.list <- apply(unknowns[3:ncol(unknowns)], 2, na.max)
+y.max <- max(unknowns.list)
+#add a buffer value to y.max
+y.max <- y.max + .05*y.max
+
+
+
+#extract clinical data
+clinical.inflammation.data <- extract.match.rows(inflammation.data, inflammation.data$Sample, "^SP\\d")
+clinical.inflammation.data <- clinical.inflammation.data[,colSums(is.na(clinical.inflammation.data))<nrow(clinical.inflammation.data)]

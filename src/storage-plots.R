@@ -1,26 +1,15 @@
-setwd("D://mzimbric/Desktop/Projects/inflammation")
+#setwd("D://mzimbric/Desktop/Projects/inflammation")
 library(ProjectTemplate)
 load.project()
+source(file = "src/helpers.R")
 
 #This script generates plots for each inflammatory marker
 #with number of days stored as the independent variable and 
 #marker concentration as the dependent variable
 #Initially we'll make Line plots with each of the 4 sample sources.
 
-#mean helper function to pass to others, setting na.rm to True
-na.mean <- function(x) mean(x, na.rm = TRUE)
-
-#helper to deal with the output of aggregate
-agg.out <- function(x) {
-  x$storage_days <- x$Group.1
-  x$samplesource <- x$Group.2
-  x <- x[c(3,5,6)]
-  x$storage_days <- as.integer(x$storage_days)
-  return(x)
-}
-
 #function wrapper for plots
-plot.markers <- function(x){
+plot.markers <- function(x, thresh, y.value){
   markers <- names(inflammation.storage.data[4:ncol(inflammation.storage.data)])
   for (i in seq_along(markers)){
   
@@ -51,18 +40,24 @@ plot.markers <- function(x){
     #calculate standard error
     marker.summary$sem <- marker.summary$sd/sqrt(marker.summary$observations)
 
+    #define the threshold
+    threshold <- thresholds[[markers[i]]]
+    
     marker.plot <- ggplot(marker.summary, aes(x=storage_days, y=mn, colour=samplesource), main = paste("Levels of", marker, "after storage")) + 
       geom_point() +
       geom_line() +
       geom_errorbar(aes(ymin=mn-sem, ymax=mn+sem), width=.1) +
-      scale_x_continuous(name = "Days Stored at 4ºC", breaks = c(0,3,7,14,28)) + 
-      scale_y_log10(name = paste("pg/mL of", markers[i])) +
+      geom_hline(yintercept = threshold, color = "red", linetype = "dashed") +
+      scale_x_continuous(name = "Days Stored at 4ÂºC", breaks = c(0,3,7,14,28)) + 
+      scale_y_log10(name = paste("pg/mL of", markers[i]), limits = c(1, y.value), breaks = c(1, 5, 10, 50, 100, 500, 1000, 5000, 10000, 50000)) +
       scale_colour_hue("Patient", labels = c("A", "B", "C", "D", "E"))
+      
     
     ggsave(marker.plot,filename=paste("figures/preliminary-plot-", markers[i],".png",sep=""))
     }
 }
 
 
-plot.markers(inflammation.storage.data)
+plot.markers(inflammation.storage.data, thresholds, y.max)
+
 
