@@ -69,4 +69,9 @@ unknowns.list <- apply(unknowns[3:ncol(unknowns)], 2, na.max)
 y.max <- max(unknowns.list)
 #add a buffer value to y.max
 y.max <- y.max + .05*y.max
-  
+
+
+
+#extract clinical data
+clinical.inflammation.data <- extract.match.rows(inflammation.data, inflammation.data$Sample, "^SP\\d")
+clinical.inflammation.data <- clinical.inflammation.data[,colSums(is.na(clinical.inflammation.data))<nrow(clinical.inflammation.data)]
