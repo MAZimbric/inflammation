@@ -5,6 +5,8 @@ inflammation.data <- merge.data.frame(inflammation.reads1, inflammation.reads2, 
 #the 3rd sheet has extra empty rows for some reason, remove them
 inflammation.reads3 <- inflammation.reads3[1:26,]
 inflammation.data <- merge.data.frame(inflammation.reads3, inflammation.data, all = TRUE)
+#log transform the data
+inflammation.data[3:ncol(inflammation.data)] <- apply(inflammation.data[3:ncol(inflammation.data)], 2, log10)
 
 #lines 5 - 60 clean the and prepare the storage data
 #this function takes the dataset and extracts only the storage sests

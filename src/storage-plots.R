@@ -11,10 +11,7 @@ source(file = "src/helpers.R")
 #function wrapper for plots
 plot.markers <- function(x, thresh, y.value){
   markers <- names(x[4:ncol(x)])
-  
-  #log transform the data
-  X[4:ncol(x)] <- apply(x[4:ncol(x)], 2, log)
-  
+
   for (i in seq_along(markers)){
   
     #subset data
@@ -47,13 +44,13 @@ plot.markers <- function(x, thresh, y.value){
     #define the threshold
     threshold <- thresholds[[markers[i]]]
     
-    marker.plot <- ggplot(marker.summary, aes(x=storage_days, y=mn, colour=samplesource), main = paste("Levels of", marker, "after storage")) + 
+    marker.plot <- ggplot(marker.summary, aes(x=storage_days, y=mn, colour=samplesource)) + 
       geom_point() +
       geom_line() +
       geom_errorbar(aes(ymin=mn-sem, ymax=mn+sem), width=.1) +
       geom_hline(yintercept = threshold, color = "red", linetype = "dashed") +
       scale_x_continuous(name = "Days Stored at 4ºC", breaks = c(0,3,7,14,28)) + 
-      scale_y_continuous(name = paste("log pg/mL of", markers[i]), limits = c(1, log(y.value))) +
+      scale_y_continuous(name = paste("log-transformed pg/mL of", markers[i]), limits = c(1, y.value)) +
       scale_colour_hue("Patient", labels = c("A", "B", "C", "D", "E"))
       
     

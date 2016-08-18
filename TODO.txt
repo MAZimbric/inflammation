@@ -1,4 +1,4 @@
 Log transform data (done in storage plot) and deal with any changes in calculations of the means and standard error. 
 
-Debug patient age loop.
+Debug patient age plot loop.
 

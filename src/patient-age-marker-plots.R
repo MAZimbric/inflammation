@@ -16,8 +16,9 @@ plot.clinical <- function(clinical){
       plot.data <- clinical[clinical$retro_ID == j,]
       
       #bug in this loop, I think, when the column is all NA
-      if (all(is.na(clinical[markers[i]]))) next
-      
+      if (all(is.na(clinical[markers[i]]))) {
+        next
+      }
       else {
         divider <- plot.data$X1st_NTM_age[1] 
       
@@ -33,3 +34,4 @@ plot.clinical <- function(clinical){
 }
 
 plot.clinical(combined.clinical)
+
