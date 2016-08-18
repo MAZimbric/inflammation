@@ -10,11 +10,15 @@ source(file = "src/helpers.R")
 
 #function wrapper for plots
 plot.markers <- function(x, thresh, y.value){
-  markers <- names(inflammation.storage.data[4:ncol(inflammation.storage.data)])
+  markers <- names(x[4:ncol(x)])
+  
+  #log transform the data
+  X[4:ncol(x)] <- apply(x[4:ncol(x)], 2, log)
+  
   for (i in seq_along(markers)){
   
     #subset data
-    data.marker <- inflammation.storage.data[c('samplesource','replicate','storage_days',markers[i])]
+    data.marker <- x[c('samplesource','replicate','storage_days',markers[i])]
     #remove NA so that aggregate doesn't throw an error
     data.marker <- na.omit(data.marker)
     
@@ -49,11 +53,11 @@ plot.markers <- function(x, thresh, y.value){
       geom_errorbar(aes(ymin=mn-sem, ymax=mn+sem), width=.1) +
       geom_hline(yintercept = threshold, color = "red", linetype = "dashed") +
       scale_x_continuous(name = "Days Stored at 4ºC", breaks = c(0,3,7,14,28)) + 
-      scale_y_log10(name = paste("pg/mL of", markers[i]), limits = c(1, y.value), breaks = c(1, 5, 10, 50, 100, 500, 1000, 5000, 10000, 50000)) +
+      scale_y_continuous(name = paste("log pg/mL of", markers[i]), limits = c(1, log(y.value))) +
       scale_colour_hue("Patient", labels = c("A", "B", "C", "D", "E"))
       
     
-    ggsave(marker.plot,filename=paste("figures/preliminary-plot-", markers[i],".png",sep=""))
+    ggsave(marker.plot,filename=paste("figures/log-plot-", markers[i],".png",sep=""))
     }
 }
 
