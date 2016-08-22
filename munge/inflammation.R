@@ -9,7 +9,8 @@ data <- merge.data.frame(reads3, data, all = TRUE)
 #replace < X with 1 to act as "zeros" in the log transformed data
 len.id <- ncol(data)
 data[3:len.id] <- as.data.frame(sapply(data[3:len.id], function (x) str_replace(x, "^< [0-9]*[.][0-9]*", "1")))
-data[3:len.id] <- as.data.frame(sapply(data[3:len.id], function (x) str_replace(x, "^> [0-9]*[.][0-9]*", NA)))
+data[3:len.id] <- as.data.frame(sapply(data[3:len.id], function (x) str_replace(x, "^> [0-9]*", NA)))
+data[3:len.id] <- as.data.frame(sapply(data[3:len.id], as.numeric))
 
 
 #log transform the data
@@ -54,21 +55,12 @@ storage.data$storage_days <- as.integer(storage.data$storage_days)
 #remove source 4 since the data is incomplete
 storage.data <- storage.data[which(storage.data$samplesource != 4),]
 
-#remove columns that are all NA
-storage.data <- drop.na.column(storage.data)
-
-
-
 #This space intentionally left blank
-
-
-
-
 
 #Lines 60 - 69 clean and prepare the standards 
 #We would like to extract the maximum of the seventh standard values for each marker to use as a threshold
-inflammation.standards <- extract.match.rows(data, data$Sample, "^S7")
-thresholds <- apply(inflammation.standards[3:ncol(inflammation.standards)], 2, na.max)
+standards <- extract.match.rows(data, data$Sample, "^S7")
+thresholds <- apply(standards[3:ncol(standards)], 2, na.max)
 
 
 
@@ -85,16 +77,21 @@ y.max <- y.max + .05*y.max
 
 #extract clinical data
 clinical.data <- extract.match.rows(data, data$Sample, "^SP\\d")
-clinical.data <- drop.na.column(clinical.data)
 
-combined.clinical <- merge(x=clinical.data, y=clinical.data, by.x="Sample", by.y="sample")
-#drop excess columns 
-combined.clinical <- combined.clinical[c(-2,-41:-45)]
+#data frame has several empty columns as an artefact of the Project Template loading process
+patient.data <- drop.na.column(patient.data)
+
+#combine clinical and patient data
+combined.clinical <- merge(x=patient.data, y=clinical.data, by.x="sample", by.y="Sample")
+combined.clinical <- combined.clinical[-10]
+
+#rename columns
 combined.clinical <- rename(combined.clinical, c("disease_status..0.no..1.yes." = "disease_status", "sample_timing..0.pre..1.post." = "sample_timing"))
-combined.clinical <- combined.clinical[c(1,32:39,2:31)]
 
 combined.clinical$disease_status <- as.factor(combined.clinical$disease_status)
 levels(combined.clinical$disease_status) <- c("no", "yes")
 
 combined.clinical$sample_timing <- as.factor(combined.clinical$sample_timing)
 levels(combined.clinical$sample_timing) <- c("before", "after")
+
+combined.clinical$retro_ID <- as.factor(combined.clinical$retro_ID)
