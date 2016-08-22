@@ -7,6 +7,9 @@ source(file = "src/helpers.R")
 #with patient age as the independent variable and marker level as the 
 #dependent variable.
 
+#drop columns 35-42, since none of the patients have more than two measurements of these markers
+combined.clinical <- combined.clinical[-35:-42]
+
 plot.clinical <- function(clinical){
   markers <- names(clinical[10:ncol(clinical)])
   patients <- levels(as.factor(combined.clinical$retro_ID))
