@@ -1,3 +1,4 @@
+Drop NA rows before plotting in age/marker plots
 Create a common y axis scale for each marker in the patient age/marker plots
 
 

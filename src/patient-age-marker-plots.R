@@ -28,8 +28,10 @@ plot.clinical <- function(clinical){
         patient.plot <- ggplot(plot.data, aes_string(x= "SP_age", y = markers[i])) +
           geom_point() +
           geom_line() +
-          geom_vline(xintercept = divider, color = "red", linetype = "dashed")
-      
+          geom_vline(xintercept = divider, color = "red", linetype = "dashed") +
+          scale_x_continuous(name = "Patient age") +
+          scale_y_continuous(name = paste("log10 of", markers[i], "pg/mL"))
+          
         ggsave(patient.plot, filename=paste("figures/clinical/preliminary-plot-", markers[i], "patient-", j, ".png",sep=""))
       }
     }  
