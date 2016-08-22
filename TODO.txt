@@ -1,4 +1,5 @@
-Log transform data (done in storage plot) and deal with any changes in calculations of the means and standard error. 
+Create a common y axis scale for each marker in the patient age/marker plots
 
-Debug patient age plot loop.
+
+
 
