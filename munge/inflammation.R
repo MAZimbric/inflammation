@@ -8,7 +8,8 @@ inflammation.data <- merge.data.frame(inflammation.reads3, inflammation.data, al
 
 #replace < X with 1 to act as "zeros" in the log transformed data
 len.id <- ncol(inflammation.data)
-inflammation.data[3:len.id] <- as.data.frame(sapply(inflammation.data[3:len.id], function (x) str_replace(x, "^< [0-9]*[.][0-0]*", "1")))
+inflammation.data[3:len.id] <- as.data.frame(sapply(inflammation.data[3:len.id], function (x) str_replace(x, "^< [0-9]*[.][0-9]*", "1")))
+inflammation.data[3:len.id] <- as.data.frame(sapply(inflammation.data[3:len.id], function (x) str_replace(x, "^> [0-9]*[.][0-9]*", NA)))
 
 
 #log transform the data
