@@ -58,7 +58,7 @@ plot.markers <- function(x, thresh, y.value){
     }
 }
 
-
-plot.markers(inflammation.storage.data, thresholds, y.max)
+#DO NOT CALL WITHOUT DEBUGGING!!!!
+plot.markers(storage.data, thresholds, y.max)
 
 
