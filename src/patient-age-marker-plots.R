@@ -10,6 +10,26 @@ source(file = "src/helpers.R")
 #drop columns 35-42, since none of the patients have more than two measurements of these markers
 combined.clinical <- combined.clinical[-35:-42]
 
+age.marker.plot <- function(dataframe, marker_name) {
+  plot.data <- dataframe[dataframe$retro_ID == j,]
+  plot.data <- dataframe[c("retro_ID", "disease_status", "sample_timing", "SP_age", "X1st_NTM_age", marker_name)]
+  
+  if (all(is.na(plot.data[marker_name]))) {
+    return()
+  }
+  
+  divider <- divider <- plot.data$X1st_NTM_age[1]
+  
+  patient.plot <- ggplot(plot.data, aes_string(x= "SP_age", y = markers[i])) +
+    geom_point() +
+    geom_line() +
+    geom_vline(xintercept = divider, color = "red", linetype = "dashed") +
+    scale_x_continuous(name = "Patient age") +
+    scale_y_continuous(name = paste("log10 of", markers[i], "pg/mL"))
+  
+  ggsave(patient.plot, filename=paste("figures/clinical/preliminary-plot-", markers[i], "patient-", j, ".png",sep=""))
+}
+
 plot.clinical <- function(clinical){
   markers <- names(clinical[10:ncol(clinical)])
   patients <- levels(as.factor(combined.clinical$retro_ID))
