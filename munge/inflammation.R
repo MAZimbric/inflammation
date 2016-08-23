@@ -24,8 +24,8 @@ storage.data <- extract.match.rows(data, data$Sample, "^\\d\\d?")
 #The initial digit represents the number of days the sample was stored 
 storage.data$storage_days <- str_match(storage.data$Sample, "^[:digit:][:digit:]?")
 
-storage.data$replicate[grep(pattern = "[BDFHJL]", storage.data$Sample, value = FALSE)] <- 2
 storage.data$replicate[grep(pattern = "[ACEGIKM]", storage.data$Sample, value = FALSE)] <- 1
+storage.data$replicate[grep(pattern = "[BDFHJL]", storage.data$Sample, value = FALSE)] <- 2
 storage.data$replicate <- as.factor(storage.data$replicate)
 
 #The letter represents the patient. A and B are the same patient. C and D are the same patient, etc. 
