@@ -19,45 +19,26 @@ age.marker.plot <- function(dataframe, marker_name) {
   
   #divider <- plot.data$X1st_NTM_age[1]
   
-  marker.plot <- ggplot(plot.data, aes_string(x= "SP_age", y = markers[i])) +
+  marker.plot <- ggplot(plot.data, aes_string(x= "SP_age", y = marker_name)) +
     geom_point() +
     geom_line() +
    #geom_vline(xintercept = divider, color = "red", linetype = "dashed") +
     scale_x_continuous(name = "Patient age") +
-    scale_y_continuous(name = paste("log10 of", markers[i], "pg/mL"))+
-    facet_grid(retro_ID ~disease_status)
+    scale_y_continuous(name = paste("log10 of", marker_name, "pg/mL"))+
+    facet_grid(retro_ID ~ .)
     
   
   return(marker.plot)
 }
 
-plot.clinical <- function(clinical){
+plot.all.age.marker <- function(clinical){
   markers <- names(clinical[10:ncol(clinical)])
-  patients <- levels(as.factor(combined.clinical$retro_ID))
   for (i in seq_along(markers)) {
-    for (j in patients){
-      #subset by patient id
-      plot.data <- clinical[clinical$retro_ID == j,]
-      
-      #bug in this loop, I think, when the column is all NA
-      if (all(is.na(clinical[markers[i]]))) {
-        next
-      }
-      else {
-        divider <- plot.data$X1st_NTM_age[1] 
-      
-        patient.plot <- ggplot(plot.data, aes_string(x= "SP_age", y = markers[i])) +
-          geom_point() +
-          geom_line() +
-          geom_vline(xintercept = divider, color = "red", linetype = "dashed") +
-          scale_x_continuous(name = "Patient age") +
-          scale_y_continuous(name = paste("log10 of", markers[i], "pg/mL"))
-          
-        ggsave(patient.plot, filename=paste("figures/clinical/preliminary-plot-", markers[i], "patient-", j, ".png",sep=""))
-      }
-    }  
+      marker.plot <- age.marker.plot(combined.clinical, markers[i])
+      ggsave(marker.plot, filename=paste("figures/clinical/preliminary-faceted-", markers[i], "-plot.png",sep=""))
   }
 }
+  
 
-plot.clinical(combined.clinical)
+plot.all.age.marker(combined.clinical)
 
