@@ -25,8 +25,9 @@ age.marker.plot <- function(dataframe, marker_name) {
   
   marker.plot <- ggplot(plot.data, aes_string(x= "relative_time", y = marker_name, color = "retro_ID")) +
     geom_point() +
-    geom_line() +
-    scale_x_continuous(name = "Time relative to first positive NTM culture") +
+    geom_line(aes(linetype = disease_status)) +
+    geom_vline(xintercept = 0, linetype = "dashed") +
+    scale_x_continuous(name = "Time (years) relative to first positive NTM culture") +
     scale_y_continuous(name = paste("log10 of", marker_name, "pg/mL"))
     
   
