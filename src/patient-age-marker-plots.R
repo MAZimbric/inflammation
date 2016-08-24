@@ -10,6 +10,9 @@ source(file = "src/helpers.R")
 #drop columns 35-42, since none of the patients have more than two measurements of these markers
 combined.clinical <- combined.clinical[-35:-42]
 
+#retain only patients with both before and after cultures
+combined.clinical <- filter(combined.clinical, retro_ID %in% c("204", "132", "491"))
+  
 #create column of time relative to first positive NTM culture
 combined.clinical <- mutate(combined.clinical, relative_time = X1st_NTM_age - SP_age)
 
