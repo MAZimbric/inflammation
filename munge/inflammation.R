@@ -89,7 +89,7 @@ combined.clinical <- merge(x=patient.data, y=clinical.data, by.x="sample", by.y=
 combined.clinical <- combined.clinical[-10]
 
 #rename columns
-combined.clinical <- rename(combined.clinical, disease_status..0.no..1.yes. = disease_status, sample_timing..0.pre..1.post. = sample_timinga)
+combined.clinical <- rename(combined.clinical, disease_status = disease_status..0.no..1.yes., sample_timing = sample_timing..0.pre..1.post.)
 
 combined.clinical$disease_status <- as.factor(combined.clinical$disease_status)
 levels(combined.clinical$disease_status) <- c("no", "yes")

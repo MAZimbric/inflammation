@@ -43,4 +43,3 @@ plot.all.age.marker <- function(clinical){
   
 
 plot.all.age.marker(combined.clinical)
-
