@@ -10,22 +10,21 @@ source(file = "src/helpers.R")
 #drop columns 35-42, since none of the patients have more than two measurements of these markers
 combined.clinical <- combined.clinical[-35:-42]
 
+#create column of time relative to first positive NTM culture
+combined.clinical <- mutate(combined.clinical, relative_time = X1st_NTM_age - SP_age)
+
 age.marker.plot <- function(dataframe, marker_name) {
-  plot.data <- dataframe[c("retro_ID", "disease_status", "sample_timing", "SP_age", "X1st_NTM_age", marker_name)]
+  plot.data <- dataframe[c("retro_ID", "disease_status", "relative_time", marker_name)]
   
   if (all(is.na(plot.data[marker_name]))) {
     return()
   }
   
-  #divider <- plot.data$X1st_NTM_age[1]
-  
-  marker.plot <- ggplot(plot.data, aes_string(x= "SP_age", y = marker_name)) +
+  marker.plot <- ggplot(plot.data, aes_string(x= "relative_time", y = marker_name, color = "retro_ID")) +
     geom_point() +
     geom_line() +
-   #geom_vline(xintercept = divider, color = "red", linetype = "dashed") +
-    scale_x_continuous(name = "Patient age") +
-    scale_y_continuous(name = paste("log10 of", marker_name, "pg/mL"))+
-    facet_grid(retro_ID ~ .)
+    scale_x_continuous(name = "Time relative to first positive NTM culture") +
+    scale_y_continuous(name = paste("log10 of", marker_name, "pg/mL"))
     
   
   return(marker.plot)
@@ -35,7 +34,7 @@ plot.all.age.marker <- function(clinical){
   markers <- names(clinical[10:ncol(clinical)])
   for (i in seq_along(markers)) {
       marker.plot <- age.marker.plot(combined.clinical, markers[i])
-      ggsave(marker.plot, filename=paste("figures/clinical/preliminary-faceted-", markers[i], "-plot.png",sep=""))
+      ggsave(marker.plot, filename=paste("figures/clinical/preliminary-zeroed-", markers[i], "-plot.png",sep=""))
   }
 }
   
