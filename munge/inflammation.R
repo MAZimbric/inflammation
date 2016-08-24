@@ -9,7 +9,10 @@ data <- merge.data.frame(reads3, data, all = TRUE)
 #replace < X with 1 to act as "zeros" in the log transformed data
 len.id <- ncol(data)
 data[3:len.id] <- as.data.frame(sapply(data[3:len.id], function (x) str_replace(x, "^< [0-9]*[.][0-9]*", "1")))
-data[3:len.id] <- as.data.frame(sapply(data[3:len.id], function (x) str_replace(x, "^> [0-9]*", NA)))
+
+#After the update to stringr 1.1.0, str_replace is unable to replace a string with NA, 
+#so using a stupidly high number as a placeholder
+data[3:len.id] <- as.data.frame(sapply(data[3:len.id], function (x) str_replace(x, "^> [0-9]*", "1000000000")))
 data[3:len.id] <- as.data.frame(sapply(data[3:len.id], as.numeric))
 
 
@@ -86,7 +89,7 @@ combined.clinical <- merge(x=patient.data, y=clinical.data, by.x="sample", by.y=
 combined.clinical <- combined.clinical[-10]
 
 #rename columns
-combined.clinical <- rename(combined.clinical, c("disease_status..0.no..1.yes." = "disease_status", "sample_timing..0.pre..1.post." = "sample_timing"))
+combined.clinical <- rename(combined.clinical, disease_status..0.no..1.yes. = disease_status, sample_timing..0.pre..1.post. = sample_timinga)
 
 combined.clinical$disease_status <- as.factor(combined.clinical$disease_status)
 levels(combined.clinical$disease_status) <- c("no", "yes")
