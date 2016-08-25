@@ -39,17 +39,15 @@ age.marker.plot <- function(dataframe, marker_name) {
   return(marker.plot)
 }
 
-#This one doesn't work. Try rewriting with d_ply
+#This function prints zeroed, plots with all patients for all markers individually
 plot.all.age.marker <- function(clinical){
   markers <- levels(clinical$marker)
   for (i in seq_along(markers)) {
-      marker.plot <- age.marker.plot(combined.clinical, markers[i])
-      ggsave(marker.plot, filename=paste("figures/clinical/preliminary-zeroed-", markers[i], "-plot.png",sep=""))
+      marker.plot <- age.marker.plot(clinical, markers[i])
+      ggsave(marker.plot, filename=paste("figures/clinical/zeroed-", markers[i], "-plot.png",sep=""))
   }
 }
 
 #This function will take in the clinical data and a vector of marker names and produce a faceted plot 
 plot.faceted.age.marker <- function(clinical.subset){
 }
-  
-print(age.marker.plot(long.combined.clinical, "IL.1b"))
