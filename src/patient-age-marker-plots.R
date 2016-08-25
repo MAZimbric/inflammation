@@ -15,15 +15,19 @@ combined.clinical <- filter(combined.clinical, retro_ID %in% c("204", "132", "49
   
 #create column of time relative to first positive NTM culture
 combined.clinical <- mutate(combined.clinical, relative_time = X1st_NTM_age - SP_age)
+combined.clinical <- combined.clinical[c(1:9, 35, 10:34)]
+
+#stripping out unneeded data
+combined.clinical <- combined.clinical[c(3,6,10,11:35)]
+
+#melt data into long form
+long.combined.clinical <- melt(combined.clinical, id = c(1:3), na.rm = TRUE)
+long.combined.clinical <- rename(long.combined.clinical, marker = variable, marker_value = value)
 
 age.marker.plot <- function(dataframe, marker_name) {
-  plot.data <- dataframe[c("retro_ID", "disease_status", "relative_time", marker_name)]
+  plot.data <- filter(dataframe, marker == marker_name)
   
-  if (all(is.na(plot.data[marker_name]))) {
-    return()
-  }
-  
-  marker.plot <- ggplot(plot.data, aes_string(x= "relative_time", y = marker_name, color = "retro_ID")) +
+  marker.plot <- ggplot(plot.data, aes_string(x= "relative_time", y = "marker_value", color = "retro_ID")) +
     geom_point() +
     geom_line(aes(linetype = disease_status)) +
     geom_vline(xintercept = 0, linetype = "dashed") +
@@ -41,6 +45,9 @@ plot.all.age.marker <- function(clinical){
       ggsave(marker.plot, filename=paste("figures/clinical/preliminary-zeroed-", markers[i], "-plot.png",sep=""))
   }
 }
-  
 
-plot.all.age.marker(combined.clinical)
+#This function will take in the clinical data and a vector of marker names and produce a faceted plot 
+plot.faceted.age.marker <- function(clinical.subset){
+}
+  
+print(age.marker.plot(long.combined.clinical, "IL.1b"))
