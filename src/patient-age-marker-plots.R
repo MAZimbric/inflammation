@@ -24,6 +24,8 @@ combined.clinical <- combined.clinical[c(3,6,10,11:35)]
 long.combined.clinical <- melt(combined.clinical, id = c(1:3), na.rm = TRUE)
 long.combined.clinical <- rename(long.combined.clinical, marker = variable, marker_value = value)
 
+#This is the basic plotting function. It takes a clinical data dataframe in long form and the name 
+#of the marker of interest as a string
 age.marker.plot <- function(dataframe, marker_name) {
   plot.data <- filter(dataframe, marker == marker_name)
   
@@ -46,8 +48,4 @@ plot.all.age.marker <- function(clinical){
       marker.plot <- age.marker.plot(clinical, markers[i])
       ggsave(marker.plot, filename=paste("figures/clinical/zeroed-", markers[i], "-plot.png",sep=""))
   }
-}
-
-#This function will take in the clinical data and a vector of marker names and produce a faceted plot 
-plot.faceted.age.marker <- function(clinical.subset){
 }
