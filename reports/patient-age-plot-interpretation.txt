@@ -1,1 +1,19 @@
+The following markers have been excluded from plotting because they have two or fewer points per patient: VEGF, G.CSF, EGF, HGF, FGF.Basic, IFNa, IFNg, TNFa. 
+
+The following markers should probably be excluded from analysis because the data are absent or below measurement thresholds for at least 2 of the 3 patients: Eotaxin, GM.CSF, IFN.g, IL.2, IL.2R, IL.5, IL.6, IL.7, IL.10 (this one borderline), IL.12, IL.13, IL.15, IL.17, IP.10, MIP.1a, MIP.1b, RANTES, TNF.a, 
+
+The remaining markers are IL.1b, IL.1RA, IL.4, MCP.1, MIG, IFN.a, IL.8  
+
 For IL.1b, two (132, 204) out of the three patients with both before and after NTM detection samples show a sharp increase after infection. The patients are disease negative and positive, respectively. 
+
+For IL.1RA, one patient (132, disease not present) shows a drop in the marker around the time of infection, with recovery to preinfection levels within one year. The patient with disease has a markedly higher value than disease negative patients throughout the compared course of time. 
+
+For IL.4, the patient with the disease (204) shows a drop in marker level at the time of infection. One patient without disease shows no change (132) and the other's levels are below threshold. 
+
+For MCP.1, 2 patients show a drop in levels at the time of infection (204 and 491, disease present and absent respectively).
+
+For MIG, all patients show a long term decrease in marker levels, but there is no apparent relationship with time of infection. 
+
+For IFN.a, patients 132 and 204 (disease negative and positive, respectively), show a drop in levels immediately preceeding infection. 
+
+For IL.8, 2 patients show a drop in levels at the time of infection (204 and 491, disease present and absent respectively). 
