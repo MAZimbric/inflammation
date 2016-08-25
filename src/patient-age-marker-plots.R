@@ -32,14 +32,16 @@ age.marker.plot <- function(dataframe, marker_name) {
     geom_line(aes(linetype = disease_status)) +
     geom_vline(xintercept = 0, linetype = "dashed") +
     scale_x_continuous(name = "Time (years) relative to first positive NTM culture") +
-    scale_y_continuous(name = paste("log10 of", marker_name, "pg/mL"))
-    
+    scale_y_continuous(name = paste("log10 of", marker_name, "pg/mL"))+
+    scale_linetype_discrete(name = "Disease Status")+
+    scale_color_discrete(name = "Patient")
   
   return(marker.plot)
 }
 
+#This one doesn't work. Try rewriting with d_ply
 plot.all.age.marker <- function(clinical){
-  markers <- names(clinical[10:ncol(clinical)])
+  markers <- levels(clinical$marker)
   for (i in seq_along(markers)) {
       marker.plot <- age.marker.plot(combined.clinical, markers[i])
       ggsave(marker.plot, filename=paste("figures/clinical/preliminary-zeroed-", markers[i], "-plot.png",sep=""))
