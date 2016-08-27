@@ -8,38 +8,46 @@ source(file = "src/helpers.R")
 #marker concentration as the dependent variable
 #Initially we'll make Line plots with each of the 4 sample sources.
 
+process.storage.data <- function(data, marker) {
+  #subset data
+  data.marker <- data[c('samplesource','replicate','storage_days', marker)]
+  #remove NA so that aggregate doesn't throw an error
+  data.marker <- na.omit(data.marker)
+  
+  #calculate means and standard deviations and number of replicates subsetted by samplesource and storage_days
+  mn.marker <- aggregate.data.frame(data.marker, list(data.marker$storage_days, data.marker$samplesource), na.mean)
+  mn.marker <- agg.out(mn.marker)
+  names(mn.marker)[names(mn.marker) == marker] <- "mn"
+
+  sd.marker <- aggregate.data.frame(data.marker, list(data.marker$storage_days, data.marker$samplesource), sd)
+  sd.marker <- agg.out(sd.marker)
+  names(sd.marker)[names(sd.marker)== marker] <- "sd"
+  
+  reps <- aggregate.data.frame(data.marker, list(data.marker$storage_days, data.marker$samplesource), length)
+  reps <- agg.out(reps)
+  names(reps)[names(reps)== marker] <- "observations"
+  
+  
+  #merge mean and standard deviation data frames
+  marker.summary <- left_join(mn.marker,sd.marker)
+  marker.summary <- left_join(marker.summary, reps)
+  
+  #calculate standard error
+  marker.summary$sem <- marker.summary$sd/sqrt(marker.summary$observations)
+  
+  return(marker.summary)
+}
+
+
+
+
 #function wrapper for plots
 plot.markers <- function(x, thresh, y.value){
   markers <- names(x[4:ncol(x)])
 
   for (i in seq_along(markers)){
   
-    #subset data
-    data.marker <- x[c('samplesource','replicate','storage_days',markers[i])]
-    #remove NA so that aggregate doesn't throw an error
-    data.marker <- na.omit(data.marker)
-    
-    #calculate means and standard deviations and number of replicates subsetted by samplesource and storage_days
-    mn.marker <- aggregate.data.frame(data.marker, list(data.marker$storage_days, data.marker$samplesource), na.mean)
-    mn.marker <- agg.out(mn.marker)
-    names(mn.marker)[names(mn.marker)== markers[i]] <- "mn"
-    #mn.marker <- rename(mn.marker, replace = c(as.character(markers[i]) = "mn"))
-
-    sd.marker <- aggregate.data.frame(data.marker, list(data.marker$storage_days, data.marker$samplesource), sd)
-    sd.marker <- agg.out(sd.marker)
-    names(sd.marker)[names(sd.marker)== markers[i]] <- "sd"
-    
-    reps <- aggregate.data.frame(data.marker, list(data.marker$storage_days, data.marker$samplesource), length)
-    reps <- agg.out(reps)
-    names(reps)[names(reps)== markers[i]] <- "observations"
-    
-    
-    #merge mean and standard deviation data frames
-    marker.summary <- join(mn.marker,sd.marker)
-    marker.summary <- join(marker.summary, reps)
-
-    #calculate standard error
-    marker.summary$sem <- marker.summary$sd/sqrt(marker.summary$observations)
+    marker.summary <- process.storage.data(x, markers[i])
 
     #define the threshold
     threshold <- thresholds[[markers[i]]]
@@ -49,7 +57,7 @@ plot.markers <- function(x, thresh, y.value){
       geom_line() +
       geom_errorbar(aes(ymin=mn-sem, ymax=mn+sem), width=.1) +
       geom_hline(yintercept = threshold, color = "red", linetype = "dashed") +
-      scale_x_continuous(name = "Days Stored at 4ºC", breaks = c(0,3,7,14,28)) + 
+      scale_x_continuous(name = "Days Stored at 4?C", breaks = c(0,3,7,14,28)) + 
       scale_y_continuous(name = paste("log-transformed pg/mL of", markers[i]), limits = c(1, y.value)) +
       scale_colour_hue("Patient", labels = c("A", "B", "C", "D", "E"))
       
