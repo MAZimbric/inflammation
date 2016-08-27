@@ -38,31 +38,29 @@ process.storage.data <- function(data, marker) {
   return(marker.summary)
 }
 
+#creates a storage plot for an individual marker
+plot.storage.marker <- function(data, marker, threshold, y.value) {
+  marker.plot <- ggplot(data, aes(x=storage_days, y=mn, colour=samplesource)) + 
+    geom_point() +
+    geom_line() +
+    geom_errorbar(aes(ymin=mn-sem, ymax=mn+sem), width=.1) +
+    geom_hline(yintercept = threshold, color = "red", linetype = "dashed") +
+    scale_x_continuous(name = "Days Stored at 4 C", breaks = c(0,3,7,14,28)) + 
+    scale_y_continuous(name = paste("log-transformed pg/mL of", marker), limits = c(-0.5, y.value)) +
+    scale_colour_hue("Patient", labels = c("A", "B", "C", "D", "E"))
+}
 
 
-
-#function wrapper for plots
+#function wrapper for generating all plots
 plot.markers <- function(x, thresh, y.value){
   markers <- names(x[4:ncol(x)])
-
   for (i in seq_along(markers)){
-  
     marker.summary <- process.storage.data(x, markers[i])
-
     #define the threshold
-    threshold <- thresholds[[markers[i]]]
+    threshold <- thresh[markers[i]]
     
-    marker.plot <- ggplot(marker.summary, aes(x=storage_days, y=mn, colour=samplesource)) + 
-      geom_point() +
-      geom_line() +
-      geom_errorbar(aes(ymin=mn-sem, ymax=mn+sem), width=.1) +
-      geom_hline(yintercept = threshold, color = "red", linetype = "dashed") +
-      scale_x_continuous(name = "Days Stored at 4?C", breaks = c(0,3,7,14,28)) + 
-      scale_y_continuous(name = paste("log-transformed pg/mL of", markers[i]), limits = c(1, y.value)) +
-      scale_colour_hue("Patient", labels = c("A", "B", "C", "D", "E"))
-      
-    
-    ggsave(marker.plot,filename=paste("figures/log-plot-", markers[i],".png",sep=""))
+    marker.plot <- plot.storage.marker(marker.summary, markers[i], threshold, y.value)
+    ggsave(marker.plot,filename=paste("figures/storage/log-plot-", markers[i],".png",sep=""))
     }
 }
 
