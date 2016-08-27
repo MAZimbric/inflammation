@@ -34,7 +34,7 @@ age.marker.plot <- function(dataframe, marker_name) {
     geom_line(aes(linetype = disease_status)) +
     geom_vline(xintercept = 0, linetype = "dashed") +
     scale_x_continuous(name = "Time (years) relative to first positive NTM culture") +
-    scale_y_continuous(name = paste("log10 of", marker_name, "pg/mL"))+
+    scale_y_continuous(name = paste("log10 of", marker_name, "(pg/mL)"))+
     scale_linetype_discrete(name = "Disease Status")+
     scale_color_discrete(name = "Patient")
   
