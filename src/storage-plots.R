@@ -51,8 +51,8 @@ plot.storage.marker <- function(data, marker, threshold, y.value) {
 }
 
 
-#function wrapper for generating all plots
-plot.markers <- function(x, thresh, y.value){
+#function wrapper for generating plots for all markers
+plot.marker.all <- function(x, thresh, y.value){
   markers <- names(x[4:ncol(x)])
   for (i in seq_along(markers)){
     marker.summary <- process.storage.data(x, markers[i])
@@ -64,7 +64,11 @@ plot.markers <- function(x, thresh, y.value){
     }
 }
 
-#DO NOT CALL WITHOUT DEBUGGING!!!!
-plot.markers(storage.data, thresholds, y.max)
+#plot for a single marker
+plot.marker <- function(data, marker, thresh, y.value) {
+  subdata <- process.storage.data(data, marker)
+  marker.plot <- plot.storage.marker(subdata, marker, thresh, y.value)
+  return(marker.plot)
+}
 
 
