@@ -1,7 +1,7 @@
 #setwd("D://mzimbric/Desktop/Projects/inflammation")
-library(ProjectTemplate)
-load.project()
-source(file = "src/helpers.R")
+# library(ProjectTemplate)
+# load.project()
+# source(file = "src/helpers.R")
 
 #This script generates plots for each inflammatory marker
 #with number of days stored as the independent variable and 
@@ -40,7 +40,8 @@ process.storage.data <- function(data, marker) {
 
 #creates a storage plot for an individual marker
 plot.storage.marker <- function(data, marker, threshold, y.value) {
-  marker.plot <- ggplot(data, aes(x=storage_days, y=mn, colour=samplesource)) + 
+  plot.data <- process.storage.data(data = data, marker = marker)
+  marker.plot <- ggplot(plot.data, aes(x=storage_days, y=mn, colour=samplesource)) + 
     geom_point() +
     geom_line() +
     geom_errorbar(aes(ymin=mn-sem, ymax=mn+sem), width=.1) +

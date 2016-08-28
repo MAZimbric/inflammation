@@ -1,33 +1,37 @@
-setwd("D://mzimbric/Desktop/Projects/inflammation")
-library(ProjectTemplate)
-load.project()
-source(file = "src/helpers.R")
+# setwd("D://mzimbric/Desktop/Projects/inflammation")
+# library(ProjectTemplate)
+# load.project()
+# source(file = "src/helpers.R")
 
 #This file will create plots for levels of markers in clinical patients, 
 #with patient age as the independent variable and marker level as the 
 #dependent variable.
 
-#drop columns 35-42, since none of the patients have more than two measurements of these markers
-combined.clinical <- combined.clinical[-35:-42]
+prep.clinical.data <- function (data) {
+  #drop columns 35-42, since none of the patients have more than two measurements of these markers
+  combined.clinical <- data[-35:-42]
 
-#retain only patients with both before and after cultures
-combined.clinical <- filter(combined.clinical, retro_ID %in% c("204", "132", "491"))
+  #retain only patients with both before and after cultures
+  combined.clinical <- filter(combined.clinical, retro_ID %in% c("204", "132", "491"))
   
-#create column of time relative to first positive NTM culture
-combined.clinical <- mutate(combined.clinical, relative_time = X1st_NTM_age - SP_age)
-combined.clinical <- combined.clinical[c(1:9, 35, 10:34)]
+  #create column of time relative to first positive NTM culture
+  combined.clinical <- mutate(combined.clinical, relative_time = X1st_NTM_age - SP_age)
+  combined.clinical <- combined.clinical[c(1:9, 35, 10:34)]
 
-#stripping out unneeded data
-combined.clinical <- combined.clinical[c(3,6,10,11:35)]
+  #stripping out unneeded data
+  combined.clinical <- combined.clinical[c(3,6,10,11:35)]
 
-#melt data into long form
-long.combined.clinical <- melt(combined.clinical, id = c(1:3), na.rm = TRUE)
-long.combined.clinical <- rename(long.combined.clinical, marker = variable, marker_value = value)
+  #melt data into long form
+  long.combined.clinical <- melt(combined.clinical, id = c(1:3), na.rm = TRUE)
+  long.combined.clinical <- rename(long.combined.clinical, marker = variable, marker_value = value)
+  return(long.combined.clinical)
+}
 
 #This is the basic plotting function. It takes a clinical data dataframe in long form and the name 
 #of the marker of interest as a string
 age.marker.plot <- function(dataframe, marker_name) {
-  plot.data <- filter(dataframe, marker == marker_name)
+  plot.data <- prep.clinical.data (dataframe)
+  plot.data <- filter(plot.data, marker == marker_name)
   
   marker.plot <- ggplot(plot.data, aes_string(x= "relative_time", y = "marker_value", color = "retro_ID")) +
     geom_point() +
@@ -41,7 +45,7 @@ age.marker.plot <- function(dataframe, marker_name) {
   return(marker.plot)
 }
 
-#This function prints zeroed, plots with all patients for all markers individually
+#This function saves zeroed, plots with all patients for all markers individually
 plot.all.age.marker <- function(clinical){
   markers <- levels(clinical$marker)
   for (i in seq_along(markers)) {
