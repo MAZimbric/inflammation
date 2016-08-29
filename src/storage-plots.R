@@ -45,9 +45,9 @@ plot.storage.marker <- function(data, marker, threshold, y.value) {
     geom_point() +
     geom_line() +
     geom_errorbar(aes(ymin=mn-sem, ymax=mn+sem), width=.1) +
-    geom_hline(yintercept = threshold, color = "red", linetype = "dashed") +
+    geom_hline(yintercept = threshold, color = "red", linetype = "dotted") +
     scale_x_continuous(name = "Days Stored at 4 C", breaks = c(0,3,7,14,28)) + 
-    scale_y_continuous(name = paste("log-transformed pg/mL of", marker), limits = c(-0.5, y.value)) +
+    scale_y_continuous(name = paste("log10 of", marker, "(pg/mL)"), limits = c(-0.5, y.value)) +
     scale_colour_hue("Patient", labels = c("A", "B", "C", "D", "E"))
   
   return(marker.plot)
