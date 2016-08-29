@@ -1,4 +1,4 @@
-This project examines levels of inflammatory markers in sputum samples after different periods of time stored in a refrigerator to determine the stability of readings and whether 
+This project examines levels of inflammatory markers in sputum samples after different periods of time stored in a refrigerator to determine the stability of readings and levels of inflammatory markers in CF patients before and after acquisition of NTM infection.
 
 Pre-R data processing:
 A line of average values above the header was deleted.
