@@ -27,9 +27,9 @@ prep.clinical.data <- function (data) {
   return(long.combined.clinical)
 }
 
-#This is the basic plotting function. It takes a clinical data dataframe in long form and the name 
-#of the marker of interest as a string
-age.marker.plot <- function(dataframe, marker_name) {
+#This is the basic plotting function. It takes a clinical data dataframe and the name 
+#of the marker of interest as a string, a threshold value and a y.value
+age.marker.plot <- function(dataframe, marker_name, threshold, y.value) {
   plot.data <- prep.clinical.data (dataframe)
   plot.data <- filter(plot.data, marker == marker_name)
   
@@ -37,8 +37,9 @@ age.marker.plot <- function(dataframe, marker_name) {
     geom_point() +
     geom_line(aes(linetype = disease_status)) +
     geom_vline(xintercept = 0, linetype = "dashed") +
+    geom_hline(yintercept = threshold, color = "red") +
     scale_x_continuous(name = "Time (years) relative to first positive NTM culture") +
-    scale_y_continuous(name = paste("log10 of", marker_name, "(pg/mL)"))+
+    scale_y_continuous(name = paste("log10 of", marker_name, "(pg/mL)"), limits = c(-0.5, y.value))+
     scale_linetype_discrete(name = "Disease Status")+
     scale_color_discrete(name = "Patient")
   

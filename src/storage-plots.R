@@ -49,6 +49,8 @@ plot.storage.marker <- function(data, marker, threshold, y.value) {
     scale_x_continuous(name = "Days Stored at 4 C", breaks = c(0,3,7,14,28)) + 
     scale_y_continuous(name = paste("log-transformed pg/mL of", marker), limits = c(-0.5, y.value)) +
     scale_colour_hue("Patient", labels = c("A", "B", "C", "D", "E"))
+  
+  return(marker.plot)
 }
 
 
@@ -65,11 +67,6 @@ plot.marker.all <- function(x, thresh, y.value){
     }
 }
 
-#plot for a single marker
-plot.marker <- function(data, marker, thresh, y.value) {
-  subdata <- process.storage.data(data, marker)
-  marker.plot <- plot.storage.marker(subdata, marker, thresh, y.value)
-  return(marker.plot)
-}
+
 
 
