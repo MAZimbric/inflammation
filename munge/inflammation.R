@@ -109,3 +109,11 @@ levels(combined.clinical$sample_timing) <- c("before", "after")
 combined.clinical$retro_ID <- as.factor(combined.clinical$retro_ID)
 return(combined.clinical)
 }
+
+
+#call the functions
+data <- initial.data.cleaning(data)
+storage.data <- storage.cleaning(data)
+thresholds <- generate.thresholds(data)
+y.max <- find.max(data)
+combined.clinical <- clinical.cleaning(data, patient.data)
