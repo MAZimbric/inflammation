@@ -2,3 +2,32 @@ This project examines levels of inflammatory markers in sputum samples after dif
 
 Pre-R data processing:
 A line of average values above the header was deleted.
+
+File structure
+
+inflammation
+| -README #description of project
+| -TODO   #occasionally updated list of tasks to be performed for the project
+| 
+| -config/ 
+| | -global.gcf #configuration file for project loading in ProjectTemplate
+|
+| -data/
+| | -reads1.csv-reads3.csv #files generated from running Luminex immunoassay
+| | -patient-data.csv      #file containing data about patients for clinical samples
+| | -raw/ #contains the raw data files that shall never be edited, for ever and ever amen
+|
+| -figures/ #plots generated for project 
+|
+| -munge/
+| | -inflammation.R  #data cleaning script automatically run when project is loaded
+|
+| -reports/
+| | - patient-age-plot-interpretation.txt #description of clinical plots 
+|
+| -src/
+| | - helpers.R #small helper functions used across multiple other scripts
+| | - patient-age-marker-plots.R #functions to process and generate plots for clinical data
+| | - storage-plots.R  #functions to process and generate plots for storage data
+| | - side-by-side-clinical-and-storage.R #functions to generate comparisons of storage and clinical data
+
