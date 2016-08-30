@@ -13,7 +13,7 @@ sidebyside.plot <- function(storage, clinical, marker_name, thresholds, y.value)
   marker_threshold <- thresholds[marker_name]
   storage.plot <- plot.storage.marker(storage, marker_name, marker_threshold, y.value)
   patient.plot <- age.marker.plot(clinical, marker_name, marker_threshold, y.value)
-  side.by.side <- plot_grid(storage.plot, patient.plot, align = 'v', labels = c('A', 'B'))
+  side.by.side <- plot_grid(storage.plot, patient.plot, ncol = 1, align = 'h', labels = c('A', 'B'))
   return(side.by.side)
 }
 

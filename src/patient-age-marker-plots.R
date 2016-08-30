@@ -1,7 +1,7 @@
-setwd("D://mzimbric/Desktop/Projects/inflammation")
-library(ProjectTemplate)
-load.project()
-source(file = "src/helpers.R")
+# setwd("D://mzimbric/Desktop/Projects/inflammation")
+# library(ProjectTemplate)
+# load.project()
+# source(file = "src/helpers.R")
 
 #This file will create plots for levels of markers in clinical patients, 
 #with patient age as the independent variable and marker level as the 
@@ -33,6 +33,9 @@ prep.clinical.data <- function (data) {
 #This is the basic plotting function. It takes a clinical data dataframe and the name 
 #of the marker of interest as a string, a threshold value and a y.value
 age.marker.plot <- function(dataframe, marker_name, threshold, y.value) {
+  if (ncol(dataframe) > 5) {
+    dataframe <- prep.clinical.data(dataframe)
+  }
   plot.data <- filter(dataframe, marker == marker_name)
   
   marker.plot <- ggplot(plot.data, 
