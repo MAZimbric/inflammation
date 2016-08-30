@@ -40,15 +40,23 @@ process.storage.data <- function(data, marker) {
 
 #creates a storage plot for an individual marker
 plot.storage.marker <- function(data, marker, threshold, y.value) {
-  plot.data <- process.storage.data(data = data, marker = marker)
+  if (ncol(data) > 6) {
+    plot.data <- process.storage.data(data = data, marker = marker)
+  }
+  
+  else {
+    plot.data <- data
+  }
   marker.plot <- ggplot(plot.data, aes(x=storage_days, y=mn, colour=samplesource)) + 
     geom_point() +
     geom_line() +
     geom_errorbar(aes(ymin=mn-sem, ymax=mn+sem), width=.1) +
-    geom_hline(yintercept = threshold, color = "red", linetype = "dotted") +
+    geom_hline(yintercept = threshold) +
     scale_x_continuous(name = "Days Stored at 4 C", breaks = c(0,3,7,14,28)) + 
-    scale_y_continuous(name = paste("log10 of", marker, "(pg/mL)"), limits = c(-0.5, y.value)) +
-    scale_colour_hue("Patient", labels = c("A", "B", "C", "D", "E"))
+    scale_y_continuous(name = paste("log10 of", marker, "(pg/mL)"),
+                       limits = c(-0.5, y.value),
+                       breaks = seq(0,y.max,by = 1)) +
+    scale_colour_hue("Sample", labels = c("A", "B", "C", "D", "E"))
   
   return(marker.plot)
 }
@@ -63,7 +71,7 @@ plot.marker.all <- function(x, thresh, y.value){
     threshold <- thresh[markers[i]]
     
     marker.plot <- plot.storage.marker(marker.summary, markers[i], threshold, y.value)
-    ggsave(marker.plot,filename=paste("figures/storage/log-plot-", markers[i],".png",sep=""))
+    ggsave(marker.plot,filename=paste("figures/storage/storage-plot-", markers[i],".png",sep=""))
     }
 }
 
