@@ -1,7 +1,7 @@
-# setwd("D://mzimbric/Desktop/Projects/inflammation")
-# library(ProjectTemplate)
-# load.project()
-# source(file = "src/helpers.R")
+setwd("D://mzimbric/Desktop/Projects/inflammation")
+library(ProjectTemplate)
+load.project()
+source(file = "src/helpers.R")
 
 #This file will create plots for levels of markers in clinical patients, 
 #with patient age as the independent variable and marker level as the 
@@ -48,11 +48,10 @@ age.marker.plot <- function(dataframe, marker_name, threshold, y.value) {
 
 #This function saves zeroed plots with all patients for all markers individually
 #CAUSES FATAL ERROR WHEN AGE.MARKER.PLOT CALLED. DEBUG BEFORE RUNNING
-plot.all.age.marker <- function(clinical){
-  clinical <- prep.clinical.data(combined.clinical)
+plot.all.age.marker <- function(clinical, thresholds, y.value){
   markers <- levels(clinical$marker)
   for (i in seq_along(markers)) {
-      marker.plot <- age.marker.plot(clinical, markers[i])
+      marker.plot <- age.marker.plot(clinical, markers[i], thresholds[markers[i]], y.value)
       ggsave(marker.plot, filename=paste("figures/clinical/zeroed-", markers[i], "-plot.png",sep=""))
   }
 }
