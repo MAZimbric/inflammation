@@ -30,8 +30,7 @@ prep.clinical.data <- function (data) {
 #This is the basic plotting function. It takes a clinical data dataframe and the name 
 #of the marker of interest as a string, a threshold value and a y.value
 age.marker.plot <- function(dataframe, marker_name, threshold, y.value) {
-  plot.data <- prep.clinical.data (dataframe)
-  plot.data <- filter(plot.data, marker == marker_name)
+  plot.data <- filter(dataframe, marker == marker_name)
   
   marker.plot <- ggplot(plot.data, aes_string(x= "relative_time", y = "marker_value", color = "retro_ID")) +
     geom_point() +
@@ -47,11 +46,11 @@ age.marker.plot <- function(dataframe, marker_name, threshold, y.value) {
 }
 
 #This function saves zeroed plots with all patients for all markers individually
-#CAUSES FATAL ERROR WHEN AGE.MARKER.PLOT CALLED. DEBUG BEFORE RUNNING
 plot.all.age.marker <- function(clinical, thresholds, y.value){
-  markers <- levels(clinical$marker)
+  plot.data <- prep.clinical.data (clinical)
+  markers <- levels(plot.data$marker)
   for (i in seq_along(markers)) {
-      marker.plot <- age.marker.plot(clinical, markers[i], thresholds[markers[i]], y.value)
+      marker.plot <- age.marker.plot(plot.data, markers[i], thresholds[markers[i]], y.value)
       ggsave(marker.plot, filename=paste("figures/clinical/zeroed-", markers[i], "-plot.png",sep=""))
   }
 }
