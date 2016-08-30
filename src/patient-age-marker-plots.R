@@ -17,6 +17,9 @@ prep.clinical.data <- function (data) {
   #create column of time relative to first positive NTM culture
   combined.clinical <- mutate(combined.clinical, relative_time = X1st_NTM_age - SP_age)
   combined.clinical <- combined.clinical[c(1:9, 35, 10:34)]
+  
+  #filter out timepoints greater than 2 years from initial NTM detection
+  combined.clinical <- filter(combined.clinical, relative_time < 2 & relative_time > -2)
 
   #stripping out unneeded data
   combined.clinical <- combined.clinical[c(3,6,10,11:35)]
@@ -32,13 +35,19 @@ prep.clinical.data <- function (data) {
 age.marker.plot <- function(dataframe, marker_name, threshold, y.value) {
   plot.data <- filter(dataframe, marker == marker_name)
   
-  marker.plot <- ggplot(plot.data, aes_string(x= "relative_time", y = "marker_value", color = "retro_ID")) +
+  marker.plot <- ggplot(plot.data, 
+                        aes_string(x= "relative_time", y = "marker_value", 
+                                   color = "retro_ID")) +
     geom_point() +
     geom_line(aes(linetype = disease_status)) +
     geom_vline(xintercept = 0, linetype = "dashed") +
-    geom_hline(yintercept = threshold, color = "red", linetype = "dotted") +
-    scale_x_continuous(name = "Time (years) relative to first positive NTM culture") +
-    scale_y_continuous(name = paste("log10 of", marker_name, "(pg/mL)"), limits = c(-0.5, y.value))+
+    geom_hline(yintercept = threshold) +
+    scale_x_continuous(name = "Years Relative to First Positive NTM culture",
+                       breaks = seq(-2,2),
+                       limits = c(-2,1.5)) +
+    scale_y_continuous(name = paste("log10 of", marker_name, "(pg/mL)"), 
+                       limits = c(-0.5, y.value), 
+                       breaks = seq(0,y.max,by = 1)) +
     scale_linetype_discrete(name = "Disease Status")+
     scale_color_discrete(name = "Patient")
   
@@ -47,7 +56,7 @@ age.marker.plot <- function(dataframe, marker_name, threshold, y.value) {
 
 #This function saves zeroed plots with all patients for all markers individually
 plot.all.age.marker <- function(clinical, thresholds, y.value){
-  plot.data <- prep.clinical.data (clinical)
+  plot.data <- prep.clinical.data(clinical)
   markers <- levels(plot.data$marker)
   for (i in seq_along(markers)) {
       marker.plot <- age.marker.plot(plot.data, markers[i], thresholds[markers[i]], y.value)
