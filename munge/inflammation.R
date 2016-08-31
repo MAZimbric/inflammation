@@ -54,7 +54,7 @@ storage.cleaning <- function(data){
   storage.data <- storage.data[c(columns,columns-1,columns-2,1:(columns-3))]
   
   #correct for dilution of samples
-  storage.data[4:columns] <- lapply(storage.data[4:columns], function(x) x*2)
+  storage.data[4:columns] <- lapply(storage.data[4:columns], function(x) x+log10(2))
   
   #make storage days an integer
   storage.data$storage_days <- as.integer(storage.data$storage_days)
@@ -75,6 +75,8 @@ generate.thresholds <- function(data){
 #find the global maximum of all marker levels to use as a common y-axis limit
 find.max <- function(data) {
   unknowns <- extract.match.rows(data, data$Plate, "^Unknown")
+  #correct for dilution
+  unknowns[4:ncol(unknowns)] <- lapply(unknowns[4:ncol(unknowns)], function(x) x+log10(2))
   
   unknowns.list <- apply(unknowns[3:ncol(unknowns)], 2, na.max)
   y.max <- max(unknowns.list)
@@ -88,7 +90,7 @@ clinical.cleaning <- function(data, patient.data) {
 clinical.data <- extract.match.rows(data, data$Sample, "^SP\\d")
 
 #correct for dilution of samples
-clinical.data[4:ncol(clinical.data)] <- lapply(clinical.data[4:ncol(clinical.data)], function(x) x*2)
+clinical.data[4:ncol(clinical.data)] <- lapply(clinical.data[4:ncol(clinical.data)], function(x) x+log10(2))
 
 #data frame has several empty columns as an artefact of the Project Template loading process
 patient.data <- drop.na.column(patient.data)
