@@ -1,7 +1,7 @@
-setwd("D://mzimbric/Desktop/Projects/inflammation")
-library(ProjectTemplate)
-load.project()
-source(file = "src/helpers.R")
+# setwd("D://mzimbric/Desktop/Projects/inflammation")
+# library(ProjectTemplate)
+# load.project()
+# source(file = "src/helpers.R")
 
 #This script generates plots for each inflammatory marker
 #with number of days stored as the independent variable and 
@@ -28,6 +28,7 @@ plot.storage.marker <- function(data, marker, threshold, y.value) {
 
 
 #function wrapper for generating plots for all markers
+#takes a dataframe, a named vector of threshold values, and a max y value
 plot.marker.all <- function(x, thresh, y.value){
   markers <- levels(marker_name)
   for (i in seq_along(markers)){
@@ -39,7 +40,8 @@ plot.marker.all <- function(x, thresh, y.value){
     }
 }
 
-#function for creating faceted plot
+#function for creating faceted plot, takes a long dataframe, 
+#a character vector of cytokines of interest, and a max y value
 faceted.storage <- function(data, marker_vector, y.value){
   plot.data <- filter(data, marker_name %in% marker_vector)
   
