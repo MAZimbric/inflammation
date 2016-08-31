@@ -6,9 +6,6 @@ source(file = "src/helpers.R")
 #This script generates plots for each inflammatory marker
 #with number of days stored as the independent variable and 
 #marker concentration as the dependent variable
-#Initially we'll make Line plots with each of the 4 sample sources.
-
-
 
 #creates a storage plot for an individual marker. Pass a processed storage data frame 
 plot.storage.marker <- function(data, marker, threshold, y.value) {
@@ -42,6 +39,20 @@ plot.marker.all <- function(x, thresh, y.value){
     }
 }
 
-
+#function for creating faceted plot
+faceted.storage <- function(data, marker_vector, y.value){
+  plot.data <- filter(data, marker_name %in% marker_vector)
+  
+  plot <- ggplot(plot.data, aes(x=storage_days, y=mn, colour=samplesource)) + 
+    geom_point() +
+    geom_line() +
+    geom_errorbar(aes(ymin=mn-sem, ymax=mn+sem), width=.1) +
+    scale_x_continuous(name = "Days Stored at 4 C", breaks = c(0,3,7,14,28)) + 
+    scale_y_continuous(name = paste("log10 of cytokine level (pg/mL)"),
+                       limits = c(-0.5, y.value),
+                       breaks = seq(0,y.max,by = 1)) +
+    scale_colour_hue("Sample", labels = c("A", "B", "C", "D", "E"))+
+    facet_wrap(~marker_name)
+}
 
 

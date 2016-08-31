@@ -93,30 +93,30 @@ find.max <- function(data) {
 }
 
 clinical.cleaning <- function(data, patient.data) {
-#extract clinical data
-clinical.data <- extract.match.rows(data, data$Sample, "^SP\\d")
-
-#correct for dilution of samples
-clinical.data[4:ncol(clinical.data)] <- lapply(clinical.data[4:ncol(clinical.data)], function(x) x+log10(2))
-
-#data frame has several empty columns as an artefact of the Project Template loading process
-patient.data <- drop.na.column(patient.data)
-
-#combine clinical and patient data
-combined.clinical <- merge(x=patient.data, y=clinical.data, by.x="sample", by.y="Sample")
-combined.clinical <- combined.clinical[-10]
-
-#rename columns
-combined.clinical <- rename(combined.clinical, disease_status = disease_status..0.no..1.yes., sample_timing = sample_timing..0.pre..1.post.)
-
-combined.clinical$disease_status <- as.factor(combined.clinical$disease_status)
-levels(combined.clinical$disease_status) <- c("no", "yes")
-
-combined.clinical$sample_timing <- as.factor(combined.clinical$sample_timing)
-levels(combined.clinical$sample_timing) <- c("before", "after")
-
-combined.clinical$retro_ID <- as.factor(combined.clinical$retro_ID)
-return(combined.clinical)
+  #extract clinical data
+  clinical.data <- extract.match.rows(data, data$Sample, "^SP\\d")
+  
+  #correct for dilution of samples
+  clinical.data[4:ncol(clinical.data)] <- lapply(clinical.data[4:ncol(clinical.data)], function(x) x+log10(2))
+  
+  #data frame has several empty columns as an artefact of the Project Template loading process
+  patient.data <- drop.na.column(patient.data)
+  
+  #combine clinical and patient data
+  combined.clinical <- merge(x=patient.data, y=clinical.data, by.x="sample", by.y="Sample")
+  combined.clinical <- combined.clinical[-10]
+  
+  #rename columns
+  combined.clinical <- rename(combined.clinical, disease_status = disease_status..0.no..1.yes., sample_timing = sample_timing..0.pre..1.post.)
+  
+  combined.clinical$disease_status <- as.factor(combined.clinical$disease_status)
+  levels(combined.clinical$disease_status) <- c("no", "yes")
+  
+  combined.clinical$sample_timing <- as.factor(combined.clinical$sample_timing)
+  levels(combined.clinical$sample_timing) <- c("before", "after")
+  
+  combined.clinical$retro_ID <- as.factor(combined.clinical$retro_ID)
+  return(combined.clinical)
 }
 
 process.storage.data <- function(data) {

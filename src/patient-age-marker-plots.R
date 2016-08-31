@@ -68,7 +68,7 @@ plot.all.age.marker <- function(clinical, thresholds, y.value){
 }
 
 #This function produces a faceted plot given a character vector of marker names
-faceted.clinical <- function(clinical, thresholds, y.value, markers) {
+faceted.clinical <- function(clinical, markers, y.value) {
   clinical <- prep.clinical.data(clinical)
   clinical <- filter(clinical, marker %in% markers)
   
@@ -78,7 +78,6 @@ faceted.clinical <- function(clinical, thresholds, y.value, markers) {
     geom_point() +
     geom_line(aes(linetype = disease_status)) +
     geom_vline(xintercept = 0, linetype = "dashed") +
-    #geom_hline(yintercept = thresholds[marker]) +
     scale_x_continuous(name = "Years Relative to First Positive NTM culture",
                        breaks = seq(-2,2),
                        limits = c(-2,1.5)) +
