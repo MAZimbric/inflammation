@@ -119,6 +119,31 @@ combined.clinical$retro_ID <- as.factor(combined.clinical$retro_ID)
 return(combined.clinical)
 }
 
+process.storage.data <- function(data) {
+  
+  #calculate means and standard deviations and number of replicates subsetted by samplesource and storage_days
+  mn <- aggregate.data.frame(data, list(data$storage_days, data$samplesource, data$marker_name), mean)
+  mn <- agg.out(mn)
+  mn <- rename(mn, mn = marker_level)
+  
+  sd <- aggregate.data.frame(data, list(data$storage_days, data$samplesource, data$marker_name), sd)
+  sd <- agg.out(sd)
+  sd <- rename(sd, sd = marker_level)
+  
+  reps <- aggregate.data.frame(data, list(data$storage_days, data$samplesource, data$marker_name), length)
+  reps <- agg.out(reps)
+  reps <- rename(reps, observations = marker_level)
+  
+  
+  #merge mean and standard deviation data frames
+  summary <- left_join(mn,sd)
+  summary <- left_join(summary, reps)
+  
+  #calculate standard error
+  summary$sem <- summary$sd/sqrt(summary$observations)
+  
+  return(summary)
+}
 
 #call the functions
 data <- initial.data.cleaning(data)
@@ -126,6 +151,7 @@ storage.data <- storage.cleaning(data)
 thresholds <- generate.thresholds(data)
 y.max <- find.max(data)
 combined.clinical <- clinical.cleaning(data, patient.data)
+summary.storage <- process.storage.data(storage.data)
 
 #cytokines of interest
 cyt <- c("IL.1b", "IFN.a", "MCP.1", "MIG", "IL.8", "IL.1RA")

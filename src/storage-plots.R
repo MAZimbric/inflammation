@@ -8,36 +8,12 @@ source(file = "src/helpers.R")
 #marker concentration as the dependent variable
 #Initially we'll make Line plots with each of the 4 sample sources.
 
-process.storage.data <- function(data) {
-  
-  #calculate means and standard deviations and number of replicates subsetted by samplesource and storage_days
-  mn <- aggregate.data.frame(data, list(data$storage_days, data$samplesource), mean)
-  mn <- agg.out(mn)
-  mnr <- rename(mn, mn = marker_level)
 
-  sd <- aggregate.data.frame(data, list(data$storage_days, data$samplesource), sd)
-  sd <- agg.out(sd)
-  sd <- rename(sd, sd = marker_level)
-  
-  reps <- aggregate.data.frame(data, list(data$storage_days, data$samplesource), length)
-  reps <- agg.out(reps)
-  reps <- rename(reps, observations = marker_level)
-  
-  
-  #merge mean and standard deviation data frames
-  summary <- left_join(mn,sd)
-  summary <- left_join(summary, reps)
-  
-  #calculate standard error
-  summary$sem <- summary$sd/sqrt(summary$observations)
-  
-  return(summary)
-}
 
-#creates a storage plot for an individual marker
+#creates a storage plot for an individual marker. Pass a processed storage data frame 
 plot.storage.marker <- function(data, marker, threshold, y.value) {
   
-  plot.data <- process.storage.data(data = data, marker = marker)
+  data <- filter(data, marker_name == marker)
   
   marker.plot <- ggplot(plot.data, aes(x=storage_days, y=mn, colour=samplesource)) + 
     geom_point() +
