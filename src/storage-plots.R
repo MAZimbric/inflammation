@@ -12,7 +12,7 @@ plot.storage.marker <- function(data, marker, threshold, y.value) {
   
   data <- filter(data, marker_name == marker)
   
-  marker.plot <- ggplot(plot.data, aes(x=storage_days, y=mn, colour=samplesource)) + 
+  marker.plot <- ggplot(data, aes(x=storage_days, y=mn, colour=samplesource)) + 
     geom_point() +
     geom_line() +
     geom_errorbar(aes(ymin=mn-sem, ymax=mn+sem), width=.1) +
