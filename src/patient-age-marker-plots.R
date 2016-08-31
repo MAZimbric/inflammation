@@ -1,7 +1,7 @@
-# setwd("D://mzimbric/Desktop/Projects/inflammation")
-# library(ProjectTemplate)
-# load.project()
-# source(file = "src/helpers.R")
+setwd("D://mzimbric/Desktop/Projects/inflammation")
+library(ProjectTemplate)
+load.project()
+source(file = "src/helpers.R")
 
 #This file will create plots for levels of markers in clinical patients, 
 #with patient age as the independent variable and marker level as the 
@@ -50,7 +50,7 @@ age.marker.plot <- function(dataframe, marker_name, threshold, y.value) {
                        limits = c(-2,1.5)) +
     scale_y_continuous(name = paste("log10 of", marker_name, "(pg/mL)"), 
                        limits = c(-0.5, y.value), 
-                       breaks = seq(0,y.max,by = 1)) +
+                       breaks = seq(0,y.value,by = 1)) +
     scale_linetype_discrete(name = "Disease Status")+
     scale_color_discrete(name = "Patient")
   
@@ -65,4 +65,29 @@ plot.all.age.marker <- function(clinical, thresholds, y.value){
       marker.plot <- age.marker.plot(plot.data, markers[i], thresholds[markers[i]], y.value)
       ggsave(marker.plot, filename=paste("figures/clinical/zeroed-", markers[i], "-plot.png",sep=""))
   }
+}
+
+#This function produces a faceted plot given a character vector of marker names
+faceted.clinical <- function(clinical, thresholds, y.value, markers) {
+  clinical <- prep.clinical.data(clinical)
+  clinical <- filter(clinical, marker %in% markers)
+  
+  marker.plot <- ggplot(clinical, 
+                        aes_string(x= "relative_time", y = "marker_value", 
+                                   color = "retro_ID")) +
+    geom_point() +
+    geom_line(aes(linetype = disease_status)) +
+    geom_vline(xintercept = 0, linetype = "dashed") +
+    #geom_hline(yintercept = thresholds[marker]) +
+    scale_x_continuous(name = "Years Relative to First Positive NTM culture",
+                       breaks = seq(-2,2),
+                       limits = c(-2,1.5)) +
+    scale_y_continuous(name = paste("log10 of cytokine level (pg/mL)"), 
+                       limits = c(-0.5, y.value), 
+                       breaks = seq(0,y.value,by = 1)) +
+    scale_linetype_discrete(name = "Disease Status")+
+    scale_color_discrete(name = "Patient")+
+    facet_wrap(~marker)
+  
+  return(marker.plot)
 }
