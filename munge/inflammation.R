@@ -119,3 +119,7 @@ storage.data <- storage.cleaning(data)
 thresholds <- generate.thresholds(data)
 y.max <- find.max(data)
 combined.clinical <- clinical.cleaning(data, patient.data)
+
+#cytokines of interest
+cyt <- c("IL.1b", "IFN.a", "MCP.1", "MIG", "IL.8", "IL.1RA")
+
