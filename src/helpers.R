@@ -17,7 +17,7 @@ na.mean <- function(x) mean(x, na.rm = TRUE)
 agg.out <- function(x) {
   x$storage_days <- x$Group.1
   x$samplesource <- x$Group.2
-  x <- x[c(3,5,6)]
+  x <- x[c(3,5,7)]
   x$storage_days <- as.integer(x$storage_days)
   return(x)
 }

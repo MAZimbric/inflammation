@@ -10,9 +10,7 @@
 
 process.storage.data <- function(data, marker) {
   #subset data
-  data.marker <- data[c('samplesource','replicate','storage_days', marker)]
-  #remove NA so that aggregate doesn't throw an error
-  data.marker <- na.omit(data.marker)
+  data.marker <- filter(data, marker_name == marker)
   
   #calculate means and standard deviations and number of replicates subsetted by samplesource and storage_days
   mn.marker <- aggregate.data.frame(data.marker, list(data.marker$storage_days, data.marker$samplesource), na.mean)

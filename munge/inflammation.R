@@ -62,6 +62,13 @@ storage.cleaning <- function(data){
   #remove source 4 since the data is incomplete
   storage.data <- storage.data[which(storage.data$samplesource != 4),]
   
+  #make samplesource a factor
+  storage.data$samplesource <- as.factor(storage.data$samplesource)
+  
+  #melt data into long form
+  storage.data <- melt(storage.data, id = c("samplesource", "replicate", "storage_days"), na.rm = TRUE)
+  storage.data <- rename(storage.data, marker_name = variable, marker_level = value)
+  
   return(storage.data)
 }
 
