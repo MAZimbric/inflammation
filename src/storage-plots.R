@@ -1,7 +1,7 @@
-#setwd("D://mzimbric/Desktop/Projects/inflammation")
-# library(ProjectTemplate)
-# load.project()
-# source(file = "src/helpers.R")
+setwd("D://mzimbric/Desktop/Projects/inflammation")
+library(ProjectTemplate)
+load.project()
+source(file = "src/helpers.R")
 
 #This script generates plots for each inflammatory marker
 #with number of days stored as the independent variable and 
@@ -13,17 +13,17 @@ process.storage.data <- function(data, marker) {
   data.marker <- filter(data, marker_name == marker)
   
   #calculate means and standard deviations and number of replicates subsetted by samplesource and storage_days
-  mn.marker <- aggregate.data.frame(data.marker, list(data.marker$storage_days, data.marker$samplesource), na.mean)
+  mn.marker <- aggregate.data.frame(data.marker, list(data.marker$storage_days, data.marker$samplesource), mean)
   mn.marker <- agg.out(mn.marker)
-  names(mn.marker)[names(mn.marker) == marker] <- "mn"
+  mn.marker <- rename(mn.marker, mn = marker_level)
 
   sd.marker <- aggregate.data.frame(data.marker, list(data.marker$storage_days, data.marker$samplesource), sd)
   sd.marker <- agg.out(sd.marker)
-  names(sd.marker)[names(sd.marker)== marker] <- "sd"
+  sd.marker <- rename(sd.marker, sd = marker_level)
   
   reps <- aggregate.data.frame(data.marker, list(data.marker$storage_days, data.marker$samplesource), length)
   reps <- agg.out(reps)
-  names(reps)[names(reps)== marker] <- "observations"
+  reps <- rename(reps, observations = marker_level)
   
   
   #merge mean and standard deviation data frames
@@ -38,13 +38,9 @@ process.storage.data <- function(data, marker) {
 
 #creates a storage plot for an individual marker
 plot.storage.marker <- function(data, marker, threshold, y.value) {
-  if (ncol(data) > 6) {
-    plot.data <- process.storage.data(data = data, marker = marker)
-  }
   
-  else {
-    plot.data <- data
-  }
+  plot.data <- process.storage.data(data = data, marker = marker)
+  
   marker.plot <- ggplot(plot.data, aes(x=storage_days, y=mn, colour=samplesource)) + 
     geom_point() +
     geom_line() +
@@ -62,9 +58,8 @@ plot.storage.marker <- function(data, marker, threshold, y.value) {
 
 #function wrapper for generating plots for all markers
 plot.marker.all <- function(x, thresh, y.value){
-  markers <- names(x[4:ncol(x)])
+  markers <- levels(marker_name)
   for (i in seq_along(markers)){
-    marker.summary <- process.storage.data(x, markers[i])
     #define the threshold
     threshold <- thresh[markers[i]]
     
