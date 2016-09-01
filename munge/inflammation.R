@@ -9,7 +9,7 @@ data <- merge.data.frame(reads3, data, all = TRUE)
 initial.data.cleaning <- function(data){
   #replace < X with 1 to act as "zeros" in the log transformed data
   len.id <- ncol(data)
-  data[3:len.id] <- as.data.frame(sapply(data[3:len.id], function (x) str_replace(x, "^< [0-9]*[.][0-9]*", "1")))
+  data[3:len.id] <- as.data.frame(sapply(data[3:len.id], function (x) str_replace(x, "^< [0-9]*[.][0-9]*", "0")))
   
   #After the update to stringr 1.1.0, str_replace is unable to replace a string with NA, 
   #so using a stupidly high number as a placeholder
@@ -18,7 +18,7 @@ initial.data.cleaning <- function(data){
   
   
   #log transform the data
-  data[3:ncol(data)] <- apply(data[3:ncol(data)], 2, log10)
+  #data[3:ncol(data)] <- apply(data[3:ncol(data)], 2, log10)
   return(data)
 }
 
