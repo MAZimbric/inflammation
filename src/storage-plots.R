@@ -42,7 +42,7 @@ plot.marker.all <- function(x, thresh, y.value){
 
 #function for creating faceted plot, takes a long dataframe, 
 #a character vector of cytokines of interest, and a vector of plot labels
-labels <- c(IL.1b = expression(paste("IL-1", beta)), G.CSF = "G-CSF", MCP.1 = "MCP-1", MIG = "MIG", IL.8 = "IL-8", IL.1RA = "IL.1Ra" )
+labels <- c(IL.1b = "IL-1b", G.CSF = "G-CSF", MCP.1 = "MCP-1", MIG = "MIG", IL.8 = "IL-8", IL.1RA = "IL.1Ra" )
 faceted.storage <- function(data, marker_vector, labels){
   plot.data <- filter(data, marker_name %in% marker_vector)
   
@@ -54,7 +54,7 @@ faceted.storage <- function(data, marker_vector, labels){
     scale_y_continuous(name = "log10 sputum level (pg/mL)",
                        breaks = seq(0,5,by = 1)) +
     scale_colour_hue("Sample", labels = c("A", "B", "C", "D", "E"))+
-    facet_wrap(~marker_name, labeller= as_labeller(labels))
+    facet_wrap(~marker_name, labeller = labeller(marker_name = as_labeller(labels)))
   
   return(plot)
 }
