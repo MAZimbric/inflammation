@@ -50,11 +50,11 @@ faceted.storage <- function(data, marker_vector, y.value){
     geom_line() +
     geom_errorbar(aes(ymin=mn-sem, ymax=mn+sem), width=.1) +
     scale_x_continuous(name = "Days Stored at 4 C", breaks = c(0,3,7,14,28)) + 
-    scale_y_continuous(name = paste("Cytokine level (pg/mL)")) +
+    scale_y_continuous(name = paste("log10 of cytokine level (pg/mL)"),
+                       limits = c(-0.5, y.value),
+                       breaks = seq(0,y.max,by = 1)) +
     scale_colour_hue("Sample", labels = c("A", "B", "C", "D", "E"))+
     facet_wrap(~marker_name)
-  
-  return(plot)
 }
 
 
