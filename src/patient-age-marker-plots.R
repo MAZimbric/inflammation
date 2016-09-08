@@ -1,7 +1,7 @@
-setwd("D://mzimbric/Desktop/Projects/inflammation")
-library(ProjectTemplate)
-load.project()
-source(file = "src/helpers.R")
+# setwd("D://mzimbric/Desktop/Projects/inflammation")
+# library(ProjectTemplate)
+# load.project()
+# source(file = "src/helpers.R")
 
 #This file will create plots for levels of markers in clinical patients, 
 #with patient age as the independent variable and marker level as the 
@@ -81,7 +81,9 @@ faceted.clinical <- function(clinical, markers, y.value) {
     scale_x_continuous(name = "Years Relative to First Positive NTM culture",
                        breaks = seq(-2,2),
                        limits = c(-2,1.5)) +
-    scale_y_continuous(name = paste("Cytokine level (pg/mL)")) +
+    scale_y_continuous(name = paste("log10 of cytokine level (pg/mL)"), 
+                       limits = c(-0.5, y.value), 
+                       breaks = seq(0,y.value,by = 1)) +
     scale_linetype_discrete(name = "Disease Status")+
     scale_color_discrete(name = "Patient")+
     facet_wrap(~marker)
