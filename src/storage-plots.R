@@ -42,10 +42,11 @@ plot.marker.all <- function(x, thresh, y.value){
 
 #function for creating faceted plot, takes a long dataframe, 
 #a character vector of cytokines of interest, and a vector of plot labels
-labels <- c(IL.1b = "IL-1beta", G.CSF = "G-CSF", MCP.1 = "MCP-1", MIG = "MIG", IL.8 = "IL-8", IL.1RA = "IL-1Ra" )
+labels <- c(IL.1b = "IL-1beta", G.CSF = "G-CSF", MIG = "MIG", MCP.1 = "MCP-1", IL.8 = "IL-8", IL.1RA = "IL-1Ra" )
 faceted.storage <- function(data, marker_vector, labels){
   require(ggthemes)
   plot.data <- filter(data, marker_name %in% marker_vector)
+  plot.data$marker_name <- factor(plot.data$marker_name, marker_vector)
   
   plot <- ggplot(plot.data, aes(x=storage_days, y=mn, colour=samplesource)) + 
     geom_point() +
@@ -53,7 +54,7 @@ faceted.storage <- function(data, marker_vector, labels){
     geom_errorbar(aes(ymin=mn-sem, ymax=mn+sem), width=.1) +
     scale_x_continuous(name = "Days Stored at 4 C", breaks = c(0,3,7,14,28)) + 
     scale_y_continuous(name = "log10 sputum level (pg/mL)",
-                       breaks = seq(0,5,by = 1)) +
+                       breaks = seq(0,5,by = 1), limits = c(0,4.5)) +
     scale_colour_hue("Sample", labels = c("A", "B", "C", "D", "E"))+
     facet_wrap(~marker_name, labeller = labeller(marker_name = as_labeller(labels)))+
     theme(panel.background = element_rect(fill = 'white', colour = 'grey'), 
@@ -61,7 +62,9 @@ faceted.storage <- function(data, marker_vector, labels){
           panel.grid.minor = element_line(color = "grey90"),
           axis.text = element_text(size = 12),
           axis.title = element_text(size = 15),
-          strip.text = element_text(size = 14))
+          strip.text = element_text(size = 14),
+          legend.text = element_text(size = 12),
+          legend.title = element_text(size = 14))
   
   
   return(plot)

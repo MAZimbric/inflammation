@@ -154,5 +154,5 @@ combined.clinical <- clinical.cleaning(data, patient.data)
 summary.storage <- process.storage.data(storage.data)
 
 #cytokines of interest
-cyt <- c("IL.1b", "G.CSF", "MCP.1", "MIG", "IL.8", "IL.1RA")
+cyt <- c("MCP.1", "IL.8", "IL.1RA", "IL.1b", "G.CSF",  "MIG")
 
