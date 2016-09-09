@@ -53,8 +53,8 @@ faceted.storage <- function(data, marker_vector, labels){
     geom_line() +
     geom_errorbar(aes(ymin=mn-sem, ymax=mn+sem), width=.1) +
     scale_x_continuous(name = "Days Stored at 4 C", breaks = c(0,3,7,14,28)) + 
-    scale_y_continuous(name = "log10 sputum level (pg/mL)",
-                       breaks = seq(0,5,by = 1), limits = c(0,4.5)) +
+    scale_y_continuous(name = "log10 Sputum Level (pg/mL)",
+                       breaks = seq(0,5,by = 1), limits = c(0,4.65)) +
     scale_colour_hue("Sample", labels = c("A", "B", "C", "D", "E"))+
     facet_wrap(~marker_name, labeller = labeller(marker_name = as_labeller(labels)))+
     theme(panel.background = element_rect(fill = 'white', colour = 'grey'), 
