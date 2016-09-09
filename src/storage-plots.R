@@ -42,7 +42,7 @@ plot.marker.all <- function(x, thresh, y.value){
 
 #function for creating faceted plot, takes a long dataframe, 
 #a character vector of cytokines of interest, and a vector of plot labels
-labels <- c(IL.1b = "IL-1b", G.CSF = "G-CSF", MCP.1 = "MCP-1", MIG = "MIG", IL.8 = "IL-8", IL.1RA = "IL-1Ra" )
+labels <- c(IL.1b = "IL-1beta", G.CSF = "G-CSF", MCP.1 = "MCP-1", MIG = "MIG", IL.8 = "IL-8", IL.1RA = "IL-1Ra" )
 faceted.storage <- function(data, marker_vector, labels){
   require(ggthemes)
   plot.data <- filter(data, marker_name %in% marker_vector)
