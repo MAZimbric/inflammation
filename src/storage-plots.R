@@ -1,4 +1,4 @@
-setwd("D://mzimbric/Desktop/Projects/inflammation")
+#setwd("D://mzimbric/Desktop/Projects/inflammation")
 library(ProjectTemplate)
 load.project()
 source(file = "src/helpers.R")
@@ -52,7 +52,7 @@ faceted.storage <- function(data, marker_vector, labels){
     geom_point() +
     geom_line() +
     geom_errorbar(aes(ymin=mn-sem, ymax=mn+sem), width=.1) +
-    scale_x_continuous(name = "Days Stored at 4 C", breaks = c(0,3,7,14,28)) + 
+    scale_x_continuous(name = "Days Stored at 4º C", breaks = c(0,3,7,14,28)) + 
     scale_y_continuous(name = "log10 Sputum Level (pg/mL)",
                        breaks = seq(0,5,by = 1), limits = c(0,4.65)) +
     scale_colour_hue("Sample", labels = c("A", "B", "C", "D", "E"))+
