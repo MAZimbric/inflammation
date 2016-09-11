@@ -62,6 +62,9 @@ storage.cleaning <- function(data){
   #remove source 4 since the data is incomplete
   storage.data <- storage.data[which(storage.data$samplesource != 4),]
   
+  #remove source 5 since the data is from BAL, not sputum
+  storage.data <- storage.data[which(storage.data$samplesource !=5),]
+  
   #make samplesource a factor
   storage.data$samplesource <- as.factor(storage.data$samplesource)
   
