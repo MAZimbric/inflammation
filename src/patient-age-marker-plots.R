@@ -73,6 +73,8 @@ labels <- c(IL.1b = "IL-1beta", MIG = "MIG", MCP.1 = "MCP-1", IL.8 = "IL-8", IL.
 faceted.clinical <- function(clinical, markers, labels) {
   clinical <- prep.clinical.data(clinical)
   clinical <- filter(clinical, marker %in% markers)
+  clinical$marker <- factor(clinical$marker, markers)
+  
   
   marker.plot <- ggplot(clinical, 
                         aes_string(x= "relative_time", y = "marker_value", 
